@@ -1,6 +1,15 @@
-function App() {
+import { Suspense, lazy } from 'react';
+import { Routes, Route } from "react-router-dom";
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+
+const App = () => {
   return (
-    <h1 className="text-[30px] font-bold">hehhe</h1>
+    <Suspense>
+      <Routes>
+        <Route path="/" element={<HomePage />}></Route>
+      </Routes>
+    </Suspense>
   );
 }
 
