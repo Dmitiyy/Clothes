@@ -12,7 +12,7 @@ module.exports = {
     },
     fontSize: {
       'base': '18px',
-      'xl': '22px',
+      'xl': '25px',
       '3xl': '45px'
     }
   },

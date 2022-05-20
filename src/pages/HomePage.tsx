@@ -1,35 +1,132 @@
-import { FC } from "react"
+import { FC } from "react";
+import likeIcon from '../images/like.svg';
 
 const HomePage: FC = () => {
-  const columnTitle = `ml-[25px] text-blue-main text-xl mb-[10px] 
-  group-hover:text-[#fff] ease-in-out duration-200 font-medium`;
-  const column = `w-[270px] h-[700px] rounded-[40px] border-4 border-blue-main
-  group-hover:border-[#fff] ease-in-out duration-200`;
-
   return (
     <div className="w-[1000px] h-[100vh] m-auto pt-[30px]">
       <div className="flex justify-between items-center">
-        <h1 className="text-[#fff] font-bold text-center text-3xl">Inspiration Board</h1>
+        <h1 className="text-[#fff] font-bold text-center text-xl tracking-widest">Inspiration Board</h1>
         <div className="flex items-center">
           <p className="text-[#fff] mr-[15px] text-base">Dmitry Pieshkov</p>
           <div className="w-[50px] h-[50px] bg-[#fff] rounded-full" />
         </div>
       </div>
-      <div className="w-[100%] bg-grey-main rounded-[40px]">
-        <div className="flex justify-between mt-[50px] p-10">
-          <div className="group">
-            <h2 className={`${columnTitle}`}>Terrible Ideas</h2>
-            <div className={`${column}`}>
-              <div className="w-[100%] h-[150px] bg-[#222831] rounded-t-[35px]"></div>
+      <div className="w-[100%] mt-[30px]">
+        <h2 className="text-[#fff] tracking-widest text-[20px] mb-[30px]">All Concepts</h2>
+        <div className="flex justify-between">
+          <div className="p-[20px] bg-grey-main rounded-[20px]">
+            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Terrible Ideas</h2>
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
             </div>
           </div>
-          <div className="group">
-            <h2 className={`${columnTitle}`}>Good Ideas</h2>
-            <div className={`${column}`}></div>
+          <div className="p-[20px] bg-grey-main rounded-[20px]">
+            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Good Ideas</h2>
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
           </div>
-          <div className="group">
-            <h2 className={`${columnTitle}`}>Incredible Ideas</h2>
-            <div className={`${column}`}></div>
+          <div className="p-[20px] bg-grey-main rounded-[20px]">
+            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Incredible Ideas</h2>
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
+
+            <div className="w-[270px] bg-light-main rounded-[20px] p-[20px] mt-[20px]">
+              <h2 className="text-[#121212] text-[20px] font-bold">Title here</h2>
+              <p className="text-[#121212] text-[16px] mt-[10px]">
+                Lorem Ipsum is simply dummy text of the printing and
+              </p>
+              <div className="flex mt-[20px] items-center">
+                <div className="w-[40px] h-[40px] bg-[#121212] rounded-full cursor-pointer" />
+                <img src={likeIcon} alt='like' className="w-[35px] cursor-pointer ml-[20px]" />
+                <p className="text-[#121212] text-[16px] ml-[10px] font-bold mt-[3px]">123</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
