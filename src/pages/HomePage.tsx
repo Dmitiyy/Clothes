@@ -12,22 +12,39 @@ const HomePage: FC = () => {
         </div>
       </div>
       <div className="w-[100%] mt-[30px]">
-        <h2 className="text-[#fff] tracking-widest text-[20px] mb-[30px]">All Concepts</h2>
         <div className="flex justify-between items-start">
           <div className="p-[20px] bg-grey-main rounded-[20px]">
-            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Terrible Ideas</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-[#fff] text-[20px] font-bold">Terrible Ideas</h2>
+              <div className="flex justify-center items-center text-[30px] text-[#fff]
+              w-[50px] h-[50px] bg-[#55585d] rounded-full cursor-pointer">
+                <span className="mt-[-3px] select-none">+</span>
+              </div>
+            </div>
             {
               [0, 1, 2].map(item => {return <div key={item}><Card isImage={item === 1 ? true : false} /></div>})
             }
           </div>
           <div className="p-[20px] bg-grey-main rounded-[20px]">
-            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Good Ideas</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-[#fff] text-[20px] font-bold">Good Ideas</h2>
+              <div className="flex justify-center items-center text-[30px] text-[#fff]
+              w-[50px] h-[50px] bg-[#55585d] rounded-full cursor-pointer">
+                <span className="mt-[-3px] select-none">+</span>
+              </div>
+            </div>
             {
               [0, 1, 2].map(item => {return <div key={item}><Card /></div>})
             }
           </div>
           <div className="p-[20px] bg-grey-main rounded-[20px]">
-            <h2 className="text-[#fff] text-[20px] font-bold mb-[20px]">Incredible Ideas</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-[#fff] text-[20px] font-bold">Incredible Ideas</h2>
+              <div className="flex justify-center items-center text-[30px] text-[#fff]
+              w-[50px] h-[50px] bg-[#55585d] rounded-full cursor-pointer">
+                <span className="mt-[-3px] select-none">+</span>
+              </div>
+            </div>
             {
               [0, 1, 2].map(item => {return <div key={item}><Card /></div>})
             }
