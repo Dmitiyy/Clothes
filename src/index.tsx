@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './redux';
-import './index.sass';
+import './sass/index.sass';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
