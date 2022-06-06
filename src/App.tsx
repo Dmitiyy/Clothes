@@ -9,13 +9,14 @@ const App = () => {
   return (
     <div className='container'>
       <LeftSidebar />
-      <div className='content'></div>
+      <div className='content'>
+        <Suspense>
+          <Routes>
+            <Route path="/" element={<HomePage />}></Route>
+          </Routes>
+        </Suspense>
+      </div>
       <RightSidebar />
-      {/* <Suspense>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-        </Routes>
-      </Suspense> */}
     </div>
   );
 }
