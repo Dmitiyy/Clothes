@@ -1,9 +1,10 @@
 import { Suspense, lazy } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { LeftSidebar } from './components/LeftSidebar';
 import { RightSidebar } from './components/RightSidebar';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
+const GeneratePage = lazy(() => import('./pages/GeneratePage'));
 
 const App = () => {
   return (
@@ -12,7 +13,9 @@ const App = () => {
       <div className='content'>
         <Suspense>
           <Routes>
-            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/home/generate" element={<GeneratePage />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </Suspense>
       </div>

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { ClothesCard } from "../components/ClothesCard";
 import Man from '../images/man.png';
 
 const HomePage: FC = () => {
@@ -15,10 +16,15 @@ const HomePage: FC = () => {
       <div className="home__filters">
         <button>
           <svg width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 10L7.47076 1.93644C7.86175 1.4492 8.59881 1.43577 9.0073 1.90845L16 10" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M1 10L7.47076 1.93644C7.86175 1.4492 8.59881 1.43577 9.0073 1.90845L16 10" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
           </svg>
           Popular
         </button>
+      </div>
+      <div className="home__cards-wrap">
+        {
+          [0, 1, 2, 3, 4, 5].map((_, index) => (<ClothesCard key={index} />))
+        }
       </div>
     </div>
   )

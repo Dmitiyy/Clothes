@@ -1,0 +1,71 @@
+.generate
+  width: 100%
+  color: #fff
+  h2
+    font-size: 30px
+    margin-bottom: 10px
+  h3
+    margin-top: 20px
+    font-weight: normal
+    span
+      font-weight: bold
+  &__options
+    width: 100%
+    display: grid
+    grid-template-columns: repeat(2, 365px)
+    grid-gap: 20px
+    margin-top: 20px
+    button
+      height: 50px
+      border-radius: 10px
+      background: #444
+      border: none
+      outline: none
+      color: #171717
+      font-family: 'Poppins', sans-serif
+      font-weight: bold
+      cursor: pointer
+      font-size: 17px
+      display: flex
+      justify-content: center
+      align-items: center
+      transition: all .2s
+      svg
+        width: 20px
+        margin-right: 10px
+        opacity: 0
+        transition: all .1s
+        path
+          fill: #171717
+      p
+        margin-left: -30px
+        transition: all .2s
+  &-next
+    width: 55px
+    height: 55px
+    background: #DA0037
+    box-shadow: 0px 4px 25px -3px #DA0037
+    border-radius: 14px
+    border: none
+    cursor: pointer
+    display: flex
+    justify-content: center
+    align-items: center
+    color: #fff
+    font-size: 18px
+    font-weight: bold
+    font-family: 'Poppins', sans-serif
+    svg
+      width: 24px
+    &__wrap
+      display: flex
+      justify-content: flex-end
+      width: 100%
+      margin-top: 40px
+.generate__options-active
+  box-shadow: 0px 4px 25px -3px rgb(255 255 255 / 50%)
+  background: #fff !important
+  svg
+    opacity: 1 !important
+  p
+    margin-left: 0px !important
