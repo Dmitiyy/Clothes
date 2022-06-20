@@ -60,6 +60,17 @@
     font-weight: bold
     font-family: 'Poppins', sans-serif
     transition: all .3s
+    &:disabled
+      opacity: 0.5
+      cursor: default
+      &:active
+        box-shadow: 0px 4px 25px -3px #DA0037 !important
+      &:hover
+        box-shadow: 0px 4px 25px -3px #DA0037
+        background: #DA0037
+        svg
+          path
+            fill: #fff
     &:active
       box-shadow: none !important
     svg

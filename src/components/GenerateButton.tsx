@@ -1,15 +1,24 @@
 import { FC, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "../redux";
+import { setDataDefault } from "../redux/generateReducer";
 
 interface IButton {
   checkbox: boolean;
   activeOption: () => void;
   activeClass?: boolean;
+  title: string
 }
 
-export const GenerateButton: FC<IButton> = ({checkbox, activeOption, activeClass}) => {
+export const GenerateButton: FC<IButton> = ({checkbox, activeOption, activeClass, title}) => {
   const [active, setActive] = useState<boolean>(false);
   const [firstOpen, setFirstOpen] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
 
+  const handleStep = async () => {
+    dispatch(setDataDefault({ini: 'choice', data: title}));
+  }
+ 
   return (
     <button className={
       checkbox && active || !checkbox && activeClass && firstOpen ? 
@@ -19,6 +28,7 @@ export const GenerateButton: FC<IButton> = ({checkbox, activeOption, activeClass
       if (!checkbox) {activeOption()};
       setActive(prev => !prev);
       setFirstOpen(true);
+      handleStep();
     }}>
       {
         checkbox && (
@@ -27,7 +37,9 @@ export const GenerateButton: FC<IButton> = ({checkbox, activeOption, activeClass
           </svg>
         )
       }
-      <p style={{marginLeft: checkbox ? '-30px' : '0px'}}>Checkbox</p>
+      <p style={{marginLeft: checkbox ? '-30px' : '0px'}}>
+        {title[0].toUpperCase() + title.slice(1, title.length)}
+      </p>
     </button>
   )
 }
