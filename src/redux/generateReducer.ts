@@ -24,19 +24,21 @@ interface IStep {
 
 interface IState {
   data: {sex: IStep, color: IStep, mood: IStep, event: IStep};
-  choice: string;
-  params: {}
+  params: {sex: string, color: string, mood: string, event: string};
+  status: string; //* error, loading, success
+  dataList: Array<string>;
 };
 
 const initialState = {
   data: {
     sex: {description: 'Select your gender', options: ['man', 'woman'], step: 1}, 
-    color: {description: '', options: [], step: 2}, 
-    mood: {description: '', options: [], step: 3}, 
-    event: {description: '', options: [], step: 4}
+    color: {description: 'Pick a color', options: [], step: 2}, 
+    mood: {description: 'Your current mood', options: [], step: 3}, 
+    event: {description: 'Where are you going?', options: [], step: 4}
   },
-  choice: '',
-  params: []
+  params: {sex: '', color: '', mood: '', event: ''},
+  status: '',
+  dataList: []
 } as IState;
 
 const generateSlice = createSlice({
@@ -48,9 +50,17 @@ const generateSlice = createSlice({
     }
   },
   extraReducers(builder) {
-    builder.addCase(fetchGenerateStep.fulfilled, (state, action) => {
-      console.log(action.payload);
-    })
+    builder
+      .addCase(fetchGenerateStep.fulfilled, (state, action) => {
+        const { color, mood, event } = action.payload;
+        const { color: dataColor, mood: dataMood, event: dataEvent } = state.data;
+
+        dataColor.options = color;
+        dataMood.options = mood;
+        dataEvent.options = event;
+      })
+      .addCase(fetchGenerateStep.pending, (state, action) => {state.status = 'loading'})
+      .addCase(fetchGenerateStep.rejected, (state, action) => {state.status = 'error'})
   },
 });
 

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setDataDefault } from "../redux/generateReducer";
@@ -7,16 +7,40 @@ interface IButton {
   checkbox: boolean;
   activeOption: () => void;
   activeClass?: boolean;
-  title: string
+  title: string;
+  stepName: string;
 }
 
-export const GenerateButton: FC<IButton> = ({checkbox, activeOption, activeClass, title}) => {
+export const GenerateButton: FC<IButton> = ({
+  checkbox, activeOption, activeClass, title, stepName
+}) => {
   const [active, setActive] = useState<boolean>(false);
   const [firstOpen, setFirstOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
+  const { params, dataList } = useAppSelector(state => state.generate);
+  
+  useEffect(() => {
+    if (active && checkbox) {
+      dispatch(setDataDefault({ini: 'dataList', data: [...dataList, title]}));
+    } else {
+      dispatch(setDataDefault({ini: 'dataList', data: dataList.filter(item => item !== title)}));
+    }
+  }, [active]);
 
-  const handleStep = async () => {
-    dispatch(setDataDefault({ini: 'choice', data: title}));
+  useEffect(() => {
+    console.log(checkbox);
+
+  }, [checkbox]);
+
+  const handleStep = () => {
+    let result: string = title;
+
+    if (checkbox) {
+      
+      result = dataList.join(',');
+    }
+
+    dispatch(setDataDefault({ini: 'params', data: {...params, [stepName]: result}}));
   }
  
   return (

@@ -1,33 +1,30 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { GenerateButton } from "../components/GenerateButton";
-
 import { useAppSelector } from "../redux";
 import { useDispatch } from "react-redux";
+
+import { GenerateButton } from "../components/GenerateButton";
 import { AppDispatch } from "../redux";
 import { fetchGenerateStep, setDataDefault } from "../redux/generateReducer";
 
 const GeneratePage: FC = () => {
   const [activeOption, setActiveOption] = useState<number>(0);
   const [stepNum, setStepNum] = useState<number>(1);
-  const { data, choice, params } = useAppSelector(state => state.generate);
+  const { data, params, status, dataList } = useAppSelector(state => state.generate);
   const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(setDataDefault({ini: 'params', data: {...params, [findStepData()[0]]: choice}}));
-  }, [choice]);
 
   const handleActiveOption = useCallback((index: number) => {
     setActiveOption(index);
   }, []);
 
-  const findStepData = () => {
-    return Object.entries(data).find((item) => item[1].step === stepNum)!;
-  }
+  const findStepData = () => Object.entries(data).find((item) => item[1].step === stepNum)!;
+  const findParamName = () => Object.entries(params).find(item => item[0] === findStepData()[0])!;
 
   const increaseStep = async () => {
-    setStepNum(prev => prev + 1);
-    dispatch(setDataDefault({ini: 'choice', data: ''}));
-    await dispatch(fetchGenerateStep({...params}));
+    if (stepNum < 4) {
+      setStepNum(prev => prev + 1);
+      dispatch(setDataDefault({ini: 'dataList', data: []}));
+      await dispatch(fetchGenerateStep({...params})).unwrap();
+    }
   }
 
   return (
@@ -36,23 +33,24 @@ const GeneratePage: FC = () => {
       <hr />
       <h3>Step {stepNum}: <span>{findStepData()[1].description}</span></h3>
       <div className="generate__options">
-        {
-          findStepData()[1].options?.map((item, index) => {
-            return (
-              <GenerateButton 
-                checkbox={stepNum === 4 ? true : false} 
-                key={item} 
-                activeOption={() => handleActiveOption(index)} 
-                activeClass={index === activeOption ? true : false} 
-                title={item}
-              />
-            )
-          })
-        }
+      {
+        findStepData()[1].options?.map((item, index) => {
+          return (
+            <GenerateButton 
+              checkbox={stepNum === 4 ? true : false} 
+              key={item} 
+              activeOption={() => handleActiveOption(index)} 
+              activeClass={index === activeOption ? true : false} 
+              title={item}
+              stepName={findStepData()[0]}
+            />
+          )
+        })
+      }
       </div>
       <hr />
       {
-        choice.length !== 0 && (
+        findParamName()[1].length !== 0 && (
           <div className="generate-next__wrap">
             <button className="generate-prev" disabled={stepNum < 2}>
               <svg width="31" height="24" viewBox="0 0 31 24" fill="none" xmlns="http://www.w3.org/2000/svg">
