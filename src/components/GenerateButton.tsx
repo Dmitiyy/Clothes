@@ -9,37 +9,28 @@ interface IButton {
   activeClass?: boolean;
   title: string;
   stepName: string;
+  stepNum: number;
 }
 
 export const GenerateButton: FC<IButton> = ({
-  checkbox, activeOption, activeClass, title, stepName
+  checkbox, activeOption, activeClass, title, stepName, stepNum
 }) => {
   const [active, setActive] = useState<boolean>(false);
   const [firstOpen, setFirstOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-  const { params, dataList } = useAppSelector(state => state.generate);
-  
-  useEffect(() => {
-    if (active && checkbox) {
-      dispatch(setDataDefault({ini: 'dataList', data: [...dataList, title]}));
-    } else {
-      dispatch(setDataDefault({ini: 'dataList', data: dataList.filter(item => item !== title)}));
-    }
-  }, [active]);
-
-  useEffect(() => {
-    console.log(checkbox);
-
-  }, [checkbox]);
+  const { params } = useAppSelector(state => state.generate);
 
   const handleStep = () => {
-    let result: string = title;
+    let result: string = '';
+    const certainParam: string = Object.entries(params)[stepNum - 1][1];
 
-    if (checkbox) {
-      
-      result = dataList.join(',');
+    if (checkbox && !active) {
+      result = `${certainParam}${certainParam.length !== 0 ? ',' : ''}${title}`;
+    } else if (checkbox && active) {
+      result = certainParam.split(',').filter(item => item !== title).join(',');
     }
 
+    if (!checkbox) {result = title};
     dispatch(setDataDefault({ini: 'params', data: {...params, [stepName]: result}}));
   }
  
@@ -50,7 +41,7 @@ export const GenerateButton: FC<IButton> = ({
     } 
     onClick={() => {
       if (!checkbox) {activeOption()};
-      setActive(prev => !prev);
+      if (checkbox) {setActive(prev => !prev)};
       setFirstOpen(true);
       handleStep();
     }}>

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useAppSelector } from "../redux";
 import { useDispatch } from "react-redux";
 
@@ -9,22 +9,21 @@ import { fetchGenerateStep, setDataDefault } from "../redux/generateReducer";
 const GeneratePage: FC = () => {
   const [activeOption, setActiveOption] = useState<number>(0);
   const [stepNum, setStepNum] = useState<number>(1);
-  const { data, params, status, dataList } = useAppSelector(state => state.generate);
+  const { data, params, status } = useAppSelector(state => state.generate);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleActiveOption = useCallback((index: number) => {
-    setActiveOption(index);
-  }, []);
+  const handleActiveOption = ((index: number) => {setActiveOption(index)});
+
+  useEffect(() => {
+    console.log(params);
+  }, [params]);
 
   const findStepData = () => Object.entries(data).find((item) => item[1].step === stepNum)!;
   const findParamName = () => Object.entries(params).find(item => item[0] === findStepData()[0])!;
-
+  
   const increaseStep = async () => {
-    if (stepNum < 4) {
-      setStepNum(prev => prev + 1);
-      dispatch(setDataDefault({ini: 'dataList', data: []}));
-      await dispatch(fetchGenerateStep({...params})).unwrap();
-    }
+    setStepNum(prev => prev + 1);
+    await dispatch(fetchGenerateStep({...params})).unwrap();
   }
 
   return (
@@ -37,6 +36,7 @@ const GeneratePage: FC = () => {
         findStepData()[1].options?.map((item, index) => {
           return (
             <GenerateButton 
+              stepNum={stepNum}
               checkbox={stepNum === 4 ? true : false} 
               key={item} 
               activeOption={() => handleActiveOption(index)} 
@@ -50,7 +50,7 @@ const GeneratePage: FC = () => {
       </div>
       <hr />
       {
-        findParamName()[1].length !== 0 && (
+        findParamName()[1].length !== 0 ? (
           <div className="generate-next__wrap">
             <button className="generate-prev" disabled={stepNum < 2}>
               <svg width="31" height="24" viewBox="0 0 31 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +63,7 @@ const GeneratePage: FC = () => {
               </svg>
             </button>
           </div>
-        )
+        ) : null
       }
     </div>
   )

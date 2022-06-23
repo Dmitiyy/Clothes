@@ -26,7 +26,6 @@ interface IState {
   data: {sex: IStep, color: IStep, mood: IStep, event: IStep};
   params: {sex: string, color: string, mood: string, event: string};
   status: string; //* error, loading, success
-  dataList: Array<string>;
 };
 
 const initialState = {
@@ -38,7 +37,6 @@ const initialState = {
   },
   params: {sex: '', color: '', mood: '', event: ''},
   status: '',
-  dataList: []
 } as IState;
 
 const generateSlice = createSlice({
