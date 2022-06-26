@@ -56,6 +56,7 @@ const generateSlice = createSlice({
         dataColor.options = color;
         dataMood.options = mood;
         dataEvent.options = event;
+        state.status = 'success';
       })
       .addCase(fetchGenerateStep.pending, (state, action) => {state.status = 'loading'})
       .addCase(fetchGenerateStep.rejected, (state, action) => {state.status = 'error'})

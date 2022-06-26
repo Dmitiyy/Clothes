@@ -2,29 +2,27 @@ import { FC, useEffect, useState } from "react";
 import { useAppSelector } from "../redux";
 import { useDispatch } from "react-redux";
 import { motion } from "framer-motion";
+import ContentLoader from "react-content-loader";
 
 import { GenerateButton } from "../components/GenerateButton";
 import { AppDispatch } from "../redux";
 import { fetchGenerateStep, setDataDefault } from "../redux/generateReducer";
 
 const GeneratePage: FC = () => {
-  const [activeOption, setActiveOption] = useState<number>(0);
   const [stepNum, setStepNum] = useState<number>(1);
   const { data, params, status } = useAppSelector(state => state.generate);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleActiveOption = ((index: number) => {setActiveOption(index)});
+  const findStepData = Object.entries(data).find((item) => item[1].step === stepNum)!;
+  const findParamName = Object.entries(params).find(item => item[0] === findStepData[0])!;
 
   useEffect(() => {
     console.log(params);
   }, [params]);
 
-  const findStepData = () => Object.entries(data).find((item) => item[1].step === stepNum)!;
-  const findParamName = () => Object.entries(params).find(item => item[0] === findStepData()[0])!;
-
   const manageStep = async (plus: boolean) => {
     if (!plus) {
-      dispatch(setDataDefault({ini: 'params', data: {...params, [findStepData()[0]]: ''}}));
+      dispatch(setDataDefault({ini: 'params', data: {...params, [findStepData[0]]: ''}}));
     }
     setStepNum(prev => plus ? prev + 1 : prev - 1);
     await dispatch(fetchGenerateStep({...params})).unwrap();
@@ -34,19 +32,34 @@ const GeneratePage: FC = () => {
     <div className="generate">
       <h2>Generate clothes</h2>
       <hr />
-      <h3>Step {stepNum}: <span>{findStepData()[1].description}</span></h3>
+      <h3>Step {stepNum}: <span>{findStepData[1].description}</span></h3>
       <motion.div className="generate__options">
         {
-          findStepData()[1].options?.map((item, index) => {
+          status === 'loading' ? 
+          [0, 1, 2, 3].map(item => {
+            return (
+              <ContentLoader 
+                speed={2}
+                width={365}
+                height={50}
+                viewBox="0 0 365 50"
+                backgroundColor="#171717"
+                foregroundColor="#444"
+                key={item}
+              >
+                <rect x="0" y="0" rx="10" ry="10" width="365" height="50" />
+              </ContentLoader>
+            )
+          }) :
+          status === 'error' ? (<h1>Error</h1>) : 
+          findStepData[1].options?.map((item) => {
             return (
               <GenerateButton 
                 stepNum={stepNum}
                 checkbox={stepNum === 4 ? true : false} 
                 key={item} 
-                activeOption={() => handleActiveOption(index)} 
-                activeClass={index === activeOption ? true : false} 
                 title={item}
-                stepName={findStepData()[0]}
+                stepName={findStepData[0]}
               />
             )
           })
@@ -54,7 +67,7 @@ const GeneratePage: FC = () => {
       </motion.div>
       <hr />
       {
-        findParamName()[1].length !== 0 ? (
+        findParamName[1].length !== 0 ? (
           <motion.div className="generate-next__wrap">
             <button className="generate-prev" disabled={stepNum < 2} onClick={() => {manageStep(false)}}>
               <svg width="31" height="24" viewBox="0 0 31 24" fill="none" xmlns="http://www.w3.org/2000/svg">

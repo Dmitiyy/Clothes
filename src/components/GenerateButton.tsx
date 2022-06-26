@@ -1,29 +1,27 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setDataDefault } from "../redux/generateReducer";
 
 interface IButton {
   checkbox: boolean;
-  activeOption: () => void;
-  activeClass?: boolean;
   title: string;
   stepName: string;
   stepNum: number;
 }
 
-export const GenerateButton: FC<IButton> = ({
-  checkbox, activeOption, activeClass, title, stepName, stepNum
-}) => {
+export const GenerateButton: FC<IButton> = ({checkbox, title, stepName, stepNum}) => {
   const [active, setActive] = useState<boolean>(false);
-  const [firstOpen, setFirstOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const { params } = useAppSelector(state => state.generate);
+  const paramsData = Object.entries(params)[stepNum - 1];
 
   const handleStep = () => {
-    let result: string = '';
-    const certainParam: string = Object.entries(params)[stepNum - 1][1];
+    if (checkbox) {setActive(prev => !prev)};
 
+    let result: string = '';
+    const certainParam: string = paramsData[1];
+    
     if (checkbox && !active) {
       result = `${certainParam}${certainParam.length !== 0 ? ',' : ''}${title}`;
     } else if (checkbox && active) {
@@ -36,15 +34,11 @@ export const GenerateButton: FC<IButton> = ({
  
   return (
     <button className={
-      checkbox && active || !checkbox && activeClass && firstOpen ? 
+      !checkbox && paramsData[1] === title || 
+      checkbox && paramsData[1].split(',').find(item => item === title) ? 
       "generate__options-active" : ""
     } 
-    onClick={() => {
-      if (!checkbox) {activeOption()};
-      if (checkbox) {setActive(prev => !prev)};
-      setFirstOpen(true);
-      handleStep();
-    }}>
+    onClick={() => {handleStep()}}>
       {
         checkbox && (
           <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
