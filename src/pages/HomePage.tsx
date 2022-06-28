@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import { ClothesCard } from "../components/ClothesCard";
 import Man from '../images/man.png';
 
@@ -9,7 +10,7 @@ const HomePage: FC = () => {
         <div className="home__header-text">
           <h1>Generate your own style</h1>
           <p>Are you preparing for a party? We can help you find the right clothes for the event</p>
-          <button>Start</button>
+          <Link to='/home/generate'>Start</Link>
         </div>
         <img src={Man} alt="man" />
       </div>

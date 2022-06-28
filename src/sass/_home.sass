@@ -18,9 +18,13 @@
       p
         margin-bottom: 20px
         font-size: 18px
-      button
+      a
         width: 163px
         height: 55px
+        display: inline-flex
+        justify-content: center
+        align-items: center
+        text-decoration: none
         border-radius: 17px
         background: #DA0037
         box-shadow: 0px 4px 25px -3px #DA0037
@@ -30,7 +34,12 @@
         color: #fff
         font-size: 19px
         cursor: pointer
+        transition: all .3s
         font-family: 'Poppins', sans-serif
+        &:hover
+          background: #fff
+          box-shadow: 0px 4px 25px -3px #fff
+          color: #171717
   &__filters
     width: 100%
     display: flex

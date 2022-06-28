@@ -51,7 +51,7 @@ const GeneratePage: FC = () => {
               </ContentLoader>
             )
           }) :
-          status === 'error' ? (<h1>Error</h1>) : 
+          status === 'error' ? (<h2>Error</h2>) : 
           findStepData[1].options?.map((item) => {
             return (
               <GenerateButton 
