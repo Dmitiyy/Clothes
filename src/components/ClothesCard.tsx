@@ -1,6 +1,19 @@
 import { FC } from "react";
 import MockClothes from '../images/costume.png';
 
+export interface ICostume {
+  likes: number;
+  title: string;
+  image: string;
+  sex: string;
+  color: string;
+  event: string;
+  mood: string;
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+}
+
 export const ClothesCard: FC = () => {
   return (
     <div className='clothes-card'>
