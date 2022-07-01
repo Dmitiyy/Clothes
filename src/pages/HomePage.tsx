@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios, { AxiosResponse } from "axios";

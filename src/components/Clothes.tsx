@@ -5,7 +5,7 @@ export const Clothes: FC<{value: ICostume[]}> = ({ value }) => {
   return (
     <div className="home__cards-wrap">
       {
-        value?.map((item, index) => (<ClothesCard key={item._id} />))
+        value?.map((item, index) => (<ClothesCard likes={item.likes} key={item._id} />))
       }
     </div>
   )
