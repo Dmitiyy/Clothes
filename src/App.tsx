@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const GeneratePage = lazy(() => import('./pages/GeneratePage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const InfoPage = lazy(() => import('./pages/InfoPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
 
 const App = () => {
   return (
@@ -16,9 +17,10 @@ const App = () => {
         <Suspense>
           <Routes>
             <Route path="/home" element={<HomePage />} />
+            <Route path="/home/login" element={<LoginPage />} />
+            <Route path="/home/generate" element={<GeneratePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/info" element={<InfoPage />} />
-            <Route path="/home/generate" element={<GeneratePage />} />
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </Suspense>
