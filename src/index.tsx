@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { CookiesProvider } from 'react-cookie';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -19,7 +20,9 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <CookiesProvider>
+            <App />
+          </CookiesProvider>
         </QueryClientProvider>
       </BrowserRouter>
     </Provider>
