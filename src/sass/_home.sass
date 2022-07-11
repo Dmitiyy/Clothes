@@ -75,12 +75,27 @@
       background: #444
       border-radius: 11px
       border: none
+      font-family: 'Poppins', sans-serif
       outline: none
       font-size: 18px
+      font-weight: 600
       cursor: pointer
       user-select: none
       box-shadow: 0px 4px 25px -3px #000000a6
       color: #fff
+      &:disabled
+        opacity: 0.5
+        cursor: default
       svg
         margin-left: 10px
         transform: rotate(180deg)
+
+.home__cards-error
+  width: 100%
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  color: #fff
+  p
+    font-size: 18px

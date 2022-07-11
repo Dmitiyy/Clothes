@@ -19,11 +19,11 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <CookiesProvider>
+        <CookiesProvider>
+          <QueryClientProvider client={queryClient}>
             <App />
-          </CookiesProvider>
-        </QueryClientProvider>
+          </QueryClientProvider>
+        </CookiesProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
