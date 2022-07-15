@@ -5,6 +5,10 @@ import axios, { AxiosResponse } from "axios";
 import { ICostume } from "../components/ClothesCard";
 import { Clothes } from "../components/Clothes";
 import Man from '../images/man.png';
+import { HomeFilters } from "../components/HomeFilters";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "../redux";
+import { setCostumesData } from "../redux/costumesReducer";
 
 const fetchCostumes = async (page: number = 1, limit: number = 6): Promise<ICostume[]> => {
   const url: string = `http://localhost:3000/costumes/all?page=${page}&limit=${limit}`;
@@ -17,12 +21,14 @@ const HomePage: FC = () => {
   const { data, isError, isLoading } = useQuery<ICostume[], Error>(
     ['costumes', page], () => fetchCostumes(page)
   );
-  const [clothesData, setClothesData] = useState<ICostume[]>([]);
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const { data: clothesData } = useAppSelector(state => state.costumes);
   const [isShowNext, setIsShowNext] = useState<boolean>(true);
 
   useEffect(() => {
     if (data) {
-      setClothesData(prev => (prev ? [...prev] : []).concat(data));
+      dispatch(setCostumesData({ data: (clothesData ? [...clothesData] : []).concat(data) }));
       if (data.length === 0) {setIsShowNext(false)};
     };
   }, [data]);
@@ -37,14 +43,7 @@ const HomePage: FC = () => {
         </div>
         <img src={Man} alt="man" />
       </div>
-      <div className="home__filters">
-        <button>
-          <svg width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 10L7.47076 1.93644C7.86175 1.4492 8.59881 1.43577 9.0073 1.90845L16 10" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          Popular
-        </button>
-      </div>
+      <HomeFilters />
       <Clothes value={clothesData} loading={isLoading} error={isError} />
       {
         isShowNext && (

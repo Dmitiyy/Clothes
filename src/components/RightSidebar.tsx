@@ -8,7 +8,7 @@ import { Swiper as SwiperCore } from "swiper/types";
 import 'swiper/css';
 
 export const RightSidebar: FC = () => {
-  const { user, login, loading } = useGetUser({});
+  const { user, login, loading } = useGetUser();
   const [slider, setSlider] = useState<SwiperCore>();
 
   const handleRightClick = useCallback(() => {
@@ -36,7 +36,7 @@ export const RightSidebar: FC = () => {
         }
       </div>
       <h2>Saved</h2>
-      <div className=''>
+      <div>
         <div className="right-sidebar__saved">
           <Swiper
             onSwiper={setSlider}
@@ -44,7 +44,7 @@ export const RightSidebar: FC = () => {
             slidesPerView={1}
             loop={true}
             modules={[Autoplay]}
-            autoplay={{delay: 2000, disableOnInteraction: false}}
+            autoplay={{delay: 2000, disableOnInteraction: false, pauseOnMouseEnter: true}}
           >
             <SwiperSlide><ClothesCard /></SwiperSlide>
             <SwiperSlide><ClothesCard /></SwiperSlide>

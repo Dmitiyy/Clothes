@@ -11,10 +11,7 @@ export interface IUser {
   saved?: Array<ICostume>;
 }
 
-interface IState {
-  data: IUser;
-};
-
+interface IState {data: IUser};
 const initialState = {data: {}} as IState;
 
 const userSlice = createSlice({

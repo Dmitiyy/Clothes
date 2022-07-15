@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FC, useState } from "react";
 import MockClothes from '../images/costume.png';
 
 export interface ICostume {
@@ -15,6 +16,8 @@ export interface ICostume {
 }
 
 export const ClothesCard: FC<ICostume> = ({ likes }) => {
+  const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
+
   return (
     <div className='clothes-card'>
       <img src={MockClothes} alt="clothes" />
@@ -26,7 +29,7 @@ export const ClothesCard: FC<ICostume> = ({ likes }) => {
             </svg>
             <p>{likes}</p>
           </div>
-          <div className="clothes-card__link">
+          <div className="clothes-card__link" onClick={() => {setIsQuantityOpen(prev => !prev)}}>
             <div>
               {Array(3).fill(1).map((_, index) => (<span key={index} />))}
             </div>
@@ -35,6 +38,21 @@ export const ClothesCard: FC<ICostume> = ({ likes }) => {
         <div className='clothes-card__content-btn'>
           <button>+</button>
         </div>
+        <AnimatePresence>
+          {
+            isQuantityOpen && (
+              <motion.div 
+                className="clothes-card__content-quantity" initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}
+              >
+                <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.01123 0.333313C1.7332 0.333313 0.677897 1.38634 0.677897 2.66437L0.666504 23.6666L9.99984 20.1666L19.3332 23.6666V21.9827V2.66665C19.3332 1.39141 18.2751 0.333313 16.9998 0.333313H3.01123ZM3.01123 2.66665H16.9998V20.2988L9.99984 17.6738L3.00212 20.2988L3.01123 2.66665Z" fill="#171717"/>
+                </svg>
+                <p>Saved <span>21</span> times</p>
+              </motion.div>
+            )
+          }
+        </AnimatePresence>
       </div>
     </div>
   )
