@@ -2,35 +2,41 @@ import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios, { AxiosResponse } from "axios";
+import { useDispatch } from "react-redux";
+
 import { ICostume } from "../components/ClothesCard";
 import { Clothes } from "../components/Clothes";
-import Man from '../images/man.png';
 import { HomeFilters } from "../components/HomeFilters";
-import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setCostumesData } from "../redux/costumesReducer";
+import Man from '../images/man.png';
 
-const fetchCostumes = async (page: number = 1, limit: number = 6): Promise<ICostume[]> => {
-  const url: string = `http://localhost:3000/costumes/all?page=${page}&limit=${limit}`;
-  const response: AxiosResponse = await axios.get(url);
+const fetchCostumes = async (
+  page: number = 1, limit: number = 6, filterValue: string = ''
+): Promise<ICostume[]> => {
+  const url: string = `http://localhost:3000/costumes/all`;
+  const response: AxiosResponse = await axios.get(url, {params: {page, limit, filterValue}});
   return response.data;
 };
 
 const HomePage: FC = () => {
-  const [page, setPage] = useState<number>(1);
+  const { data: clothesData, page, filterValue } = useAppSelector(state => state.costumes);
   const { data, isError, isLoading } = useQuery<ICostume[], Error>(
-    ['costumes', page], () => fetchCostumes(page)
+    ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
   );
   
   const dispatch = useDispatch<AppDispatch>();
-  const { data: clothesData } = useAppSelector(state => state.costumes);
   const [isShowNext, setIsShowNext] = useState<boolean>(true);
 
   useEffect(() => {
     if (data) {
-      dispatch(setCostumesData({ data: (clothesData ? [...clothesData] : []).concat(data) }));
+      let generatedClothes = (clothesData ? [...clothesData] : []).concat(data);
+      if (filterValue.length !== 0) {generatedClothes = [...data]};
+
+      dispatch(setCostumesData({data: generatedClothes, name: 'data'}));
       if (data.length === 0) {setIsShowNext(false)};
     };
+    console.log(data);
   }, [data]);
 
   return (
@@ -49,7 +55,9 @@ const HomePage: FC = () => {
         isShowNext && (
           <div className="home__next">
             <button className="home__next-btn" disabled={isError || isLoading}
-            onClick={() => {setPage(prev => prev + 1)}}>
+            onClick={() => {
+              dispatch(setCostumesData({data: page + 1, name: 'page'}))
+            }}>
               Next
               <svg width="17" height="11" viewBox="0 0 17 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 10L7.47076 1.93644C7.86175 1.4492 8.59881 1.43577 9.0073 1.90845L16 10" stroke="#fff" strokeWidth="3" strokeLinecap="round"/>
