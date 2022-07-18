@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios, { AxiosResponse } from "axios";
@@ -20,24 +20,32 @@ const fetchCostumes = async (
 };
 
 const HomePage: FC = () => {
-  const { data: clothesData, page, filterValue } = useAppSelector(state => state.costumes);
+  const { 
+    data: clothesData, page, filterValue, isFilter, isNextBtn
+  } = useAppSelector(state => state.costumes);
+
   const { data, isError, isLoading } = useQuery<ICostume[], Error>(
     ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
   );
-  
   const dispatch = useDispatch<AppDispatch>();
-  const [isShowNext, setIsShowNext] = useState<boolean>(true);
 
   useEffect(() => {
     if (data) {
-      let generatedClothes = (clothesData ? [...clothesData] : []).concat(data);
-      if (filterValue.length !== 0) {generatedClothes = [...data]};
+      let generatedClothes = (clothesData ? [...clothesData] : []).concat([...data]);
+
+      if (isFilter) {
+        generatedClothes = [...data];
+        dispatch(setCostumesData({data: false, name: 'isFilter'}));
+      };
 
       dispatch(setCostumesData({data: generatedClothes, name: 'data'}));
-      if (data.length === 0) {setIsShowNext(false)};
+      if (data.length === 0) {dispatch(setCostumesData({data: false, name: 'isNextBtn'}))};
     };
-    console.log(data);
   }, [data]);
+
+  useEffect(() => {
+    dispatch(setCostumesData({data: isLoading, name: 'isLoading'}));
+  }, [isLoading]);
 
   return (
     <div className="home">
@@ -52,7 +60,7 @@ const HomePage: FC = () => {
       <HomeFilters />
       <Clothes value={clothesData} loading={isLoading} error={isError} />
       {
-        isShowNext && (
+        isNextBtn && (
           <div className="home__next">
             <button className="home__next-btn" disabled={isError || isLoading}
             onClick={() => {

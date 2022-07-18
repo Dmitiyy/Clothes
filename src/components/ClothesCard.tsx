@@ -1,6 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, useState } from "react";
+import { FC, memo, useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
+import { AppDispatch, useAppSelector } from "../redux";
+import { useLikeCostumeMutation } from "../redux/costumesSlice";
+import { setUserData } from "../redux/userReducer";
 
 export interface ICostume {
   likes?: number;
@@ -15,8 +20,34 @@ export interface ICostume {
   _id?: string;
 }
 
-export const ClothesCard: FC<ICostume> = ({ likes }) => {
+export const ClothesCard: FC<{value: ICostume}> = memo(({ value }) => {
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
+  const [likeTrigger, likeResponse] = useLikeCostumeMutation();
+  const { data } = useAppSelector(state => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const [isLike, setIsLike] = useState<boolean>(false);
+
+  const likeCostume = () => {
+    if (Object.keys(data).length === 0) {navigate('/home/login')}
+    else {
+      likeTrigger({ costumeId: !value._id ? '' : value._id, userId: data._id! }).unwrap();
+      let result: ICostume[] = [];
+
+      if (data.liked?.some(item => item._id === value._id)) {
+        result = data.liked!.filter(item => item._id !== value._id);
+      } else {
+        result = [...data.liked!, {...value}];
+      } 
+      dispatch(setUserData({ data: {...data, liked: result } }));
+    }
+  }
+
+  useEffect(() => {
+    if (data.liked?.some(item => item._id === value._id)) {setIsLike(true)}
+    else {setIsLike(false)};
+    console.log(data.liked);
+  }, [data.liked]);
 
   return (
     <div className='clothes-card'>
@@ -24,10 +55,13 @@ export const ClothesCard: FC<ICostume> = ({ likes }) => {
       <div className='clothes-card__content'>
         <div className='clothes-card__content-head'>
           <div className='clothes-card__like'>
-            <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M28.1802 3.4294C26.8441 2.69333 25.3116 2.27002 23.6766 2.27002C20.792 2.27002 18.2086 3.58456 16.5028 5.64584C14.7889 3.58456 12.208 2.27002 9.31943 2.27002C7.68839 2.27002 6.15874 2.69333 4.81965 3.4294C1.9466 5.02052 0 8.07965 0 11.5953C0 12.6017 0.163778 13.567 0.460415 14.47C2.06016 21.6609 16.5028 30.73 16.5028 30.73C16.5028 30.73 30.9359 21.6611 32.5379 14.47C32.8345 13.567 33 12.6004 33 11.5953C33 8.08096 31.0534 5.02277 28.1802 3.4294Z" fill="#fff"/>
+            <svg 
+              onClick={likeCostume}
+              width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M28.1802 3.4294C26.8441 2.69333 25.3116 2.27002 23.6766 2.27002C20.792 2.27002 18.2086 3.58456 16.5028 5.64584C14.7889 3.58456 12.208 2.27002 9.31943 2.27002C7.68839 2.27002 6.15874 2.69333 4.81965 3.4294C1.9466 5.02052 0 8.07965 0 11.5953C0 12.6017 0.163778 13.567 0.460415 14.47C2.06016 21.6609 16.5028 30.73 16.5028 30.73C16.5028 30.73 30.9359 21.6611 32.5379 14.47C32.8345 13.567 33 12.6004 33 11.5953C33 8.08096 31.0534 5.02277 28.1802 3.4294Z" 
+              fill={isLike ? "#DA0037" : "#fff"} />
             </svg>
-            <p>{likes}</p>
+            <p>{value.likes}</p>
           </div>
           <div className="clothes-card__link" onClick={() => {setIsQuantityOpen(prev => !prev)}}>
             <div>
@@ -56,4 +90,4 @@ export const ClothesCard: FC<ICostume> = ({ likes }) => {
       </div>
     </div>
   )
-}
+})

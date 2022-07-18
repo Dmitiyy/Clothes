@@ -41,7 +41,7 @@ export const Clothes: FC<{
             )
           })
         ) : 
-        uniqBy(value, '_id').map((item) => (<ClothesCard likes={item.likes} key={item._id} />))
+        uniqBy(value, '_id').map((item) => (<ClothesCard value={item!} key={item._id} />))
       }
     </div>
   )
