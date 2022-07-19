@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
 import { AppDispatch, useAppSelector } from "../redux";
+import { changeLikes } from "../redux/costumesReducer";
 import { useLikeCostumeMutation } from "../redux/costumesSlice";
 import { setUserData } from "../redux/userReducer";
 
@@ -20,13 +21,13 @@ export interface ICostume {
   _id?: string;
 }
 
-export const ClothesCard: FC<{value: ICostume}> = memo(({ value }) => {
+export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value , isLike }) => {
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
-  const [likeTrigger, likeResponse] = useLikeCostumeMutation();
+  const [likeTrigger] = useLikeCostumeMutation();
   const { data } = useAppSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [isLike, setIsLike] = useState<boolean>(false);
+  // const [likes, setLikes] = useState<number>();
 
   const likeCostume = () => {
     if (Object.keys(data).length === 0) {navigate('/home/login')}
@@ -36,18 +37,23 @@ export const ClothesCard: FC<{value: ICostume}> = memo(({ value }) => {
 
       if (data.liked?.some(item => item._id === value._id)) {
         result = data.liked!.filter(item => item._id !== value._id);
+        // setLikes(prev => prev! - 1);
+        dispatch(changeLikes({id: value._id!, data: value.likes! - 1}));
       } else {
         result = [...data.liked!, {...value}];
+        // setLikes(prev => prev! + 1);
+        // dispatch(setCertainLikes({id: value._id!, data: value.likes! + 1}));
+        dispatch(changeLikes({id: value._id!, data: value.likes! + 1}));
       } 
       dispatch(setUserData({ data: {...data, liked: result } }));
     }
   }
 
-  useEffect(() => {
-    if (data.liked?.some(item => item._id === value._id)) {setIsLike(true)}
-    else {setIsLike(false)};
-    console.log(data.liked);
-  }, [data.liked]);
+  // useEffect(() => {
+  //   if (value.likes) {
+  //     setLikes(value.likes);
+  //   }
+  // }, [value.likes]);
 
   return (
     <div className='clothes-card'>

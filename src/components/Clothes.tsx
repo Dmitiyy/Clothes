@@ -2,11 +2,13 @@ import { FC, memo, useEffect, useState } from "react";
 import { ClothesCard, ICostume } from "./ClothesCard";
 import { uniqBy } from 'lodash';
 import ContentLoader from "react-content-loader";
+import { useAppSelector } from "../redux";
 
 export const Clothes: FC<{
   value: ICostume[], loading: boolean, error: boolean
 }> = memo(({ value, loading, error }) => {
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+  const { data } = useAppSelector(state => state.user);
 
   useEffect(() => {
     if (!loading) {setIsFirstRender(false)};
@@ -41,7 +43,10 @@ export const Clothes: FC<{
             )
           })
         ) : 
-        uniqBy(value, '_id').map((item) => (<ClothesCard value={item!} key={item._id} />))
+        uniqBy(value, '_id').map((item) => (
+          <ClothesCard value={item!} key={item._id} 
+          isLike={data.liked?.some(elem => elem._id === item._id) ? true : false} />
+        ))
       }
     </div>
   )

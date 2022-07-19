@@ -22,9 +22,18 @@ const costumesSlice = createSlice({
       state.isFilter = true;
       state.isNextBtn = true;
       state.filterValue = action.payload.value;
+    },
+    changeLikes(state, action: PayloadAction<{id: string, data: number}>) {
+      if (state.data) {
+        // let elem = state.data.find(item => item._id === action.payload.id);
+        // elem!.likes = action.payload.data;
+        state.data
+          .find(item => item._id === action.payload.id)!.likes = action.payload.data;
+        // state.data = [...state.data, {...elem}];
+      }
     }
   }
 });
 
-export const { setCostumesData, launchFilter } = costumesSlice.actions;
+export const { setCostumesData, launchFilter, changeLikes } = costumesSlice.actions;
 export default costumesSlice.reducer;

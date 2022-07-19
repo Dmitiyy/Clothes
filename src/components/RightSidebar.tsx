@@ -46,10 +46,10 @@ export const RightSidebar: FC = () => {
             modules={[Autoplay]}
             autoplay={{delay: 2000, disableOnInteraction: false, pauseOnMouseEnter: true}}
           >
-            <SwiperSlide><ClothesCard value={{}} /></SwiperSlide>
-            <SwiperSlide><ClothesCard value={{}} /></SwiperSlide>
-            <SwiperSlide><ClothesCard value={{}} /></SwiperSlide>
-            <SwiperSlide><ClothesCard value={{}} /></SwiperSlide>
+            <SwiperSlide><ClothesCard value={{}} isLike={false} /></SwiperSlide>
+            <SwiperSlide><ClothesCard value={{}} isLike={false} /></SwiperSlide>
+            <SwiperSlide><ClothesCard value={{}} isLike={false} /></SwiperSlide>
+            <SwiperSlide><ClothesCard value={{}} isLike={false} /></SwiperSlide>
           </Swiper>
           <div className="right-sidebar__left" onClick={handleRightClick}>
             <svg width="31" height="24" viewBox="0 0 31 24" fill="none" xmlns="http://www.w3.org/2000/svg">

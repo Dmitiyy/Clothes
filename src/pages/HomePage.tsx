@@ -33,8 +33,10 @@ const HomePage: FC = () => {
     if (data) {
       let generatedClothes = (clothesData ? [...clothesData] : []).concat([...data]);
 
+      console.log(data);
       if (isFilter) {
         generatedClothes = [...data];
+        
         dispatch(setCostumesData({data: false, name: 'isFilter'}));
       };
 
