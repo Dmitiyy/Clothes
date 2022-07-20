@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios, { AxiosResponse } from "axios";
@@ -10,6 +10,7 @@ import { HomeFilters } from "../components/HomeFilters";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setCostumesData } from "../redux/costumesReducer";
 import Man from '../images/man.png';
+import { useFetchCostumesQuery } from "../redux/costumesSlice";
 
 const fetchCostumes = async (
   page: number = 1, limit: number = 6, filterValue: string = ''
@@ -24,26 +25,33 @@ const HomePage: FC = () => {
     data: clothesData, page, filterValue, isFilter, isNextBtn
   } = useAppSelector(state => state.costumes);
 
-  const { data, isError, isLoading } = useQuery<ICostume[], Error>(
-    ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
-  );
+  // const { data, isError, isLoading } = useQuery<ICostume[], Error>(
+  //   ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
+  // );
+  const { data, isError, isLoading } = useFetchCostumesQuery({page, limit: 6, filterValue});
   const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
+  
+  useCallback(() => {
     if (data) {
-      let generatedClothes = (clothesData ? [...clothesData] : []).concat([...data]);
+      let generatedClothes: ICostume[] = [];
 
-      console.log(data);
       if (isFilter) {
         generatedClothes = [...data];
-        
         dispatch(setCostumesData({data: false, name: 'isFilter'}));
-      };
-
+      } else {
+        generatedClothes = (clothesData ? [...clothesData] : []).concat([...data]);
+      }
+      
       dispatch(setCostumesData({data: generatedClothes, name: 'data'}));
+      generatedClothes = [];
       if (data.length === 0) {dispatch(setCostumesData({data: false, name: 'isNextBtn'}))};
     };
   }, [data]);
+
+  useEffect(() => {
+    console.log(data);
+    
+  }, [data])
 
   useEffect(() => {
     dispatch(setCostumesData({data: isLoading, name: 'isLoading'}));

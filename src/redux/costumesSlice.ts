@@ -12,8 +12,17 @@ export const costumesApi = createApi({
           body: data
         }
       }
+    }),
+    fetchCostumes: builder.query({
+      query(data) {
+        return {
+          url: 'costumes/all',
+          method: 'GET',
+          params: data
+        }
+      }
     })
   })
 });
 
-export const { useLikeCostumeMutation } = costumesApi;
+export const { useLikeCostumeMutation, useFetchCostumesQuery } = costumesApi;
