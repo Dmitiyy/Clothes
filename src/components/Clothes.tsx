@@ -1,17 +1,20 @@
-import { FC, memo, useEffect, useState } from "react";
+import { FC, memo, useEffect } from "react";
 import { ClothesCard, ICostume } from "./ClothesCard";
 import { uniqBy } from 'lodash';
 import ContentLoader from "react-content-loader";
-import { useAppSelector } from "../redux";
+import { AppDispatch, useAppSelector } from "../redux";
+import { useDispatch } from "react-redux";
+import { setCostumesData } from "../redux/costumesReducer";
 
 export const Clothes: FC<{
   value: ICostume[], loading: boolean, error: boolean
 }> = memo(({ value, loading, error }) => {
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const { data } = useAppSelector(state => state.user);
+  const { isFirstRender } = useAppSelector(state => state.costumes);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!loading) {setIsFirstRender(false)};
+    if (!loading) {dispatch(setCostumesData({data: false, name: 'isFirstRender'}))};
   }, [loading]);
 
   if (error) {

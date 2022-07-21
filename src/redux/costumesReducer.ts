@@ -3,11 +3,12 @@ import { ICostume } from '../components/ClothesCard';
 
 interface IState {
   data: ICostume[], filterValue: string, page: number, 
-  isFilter: boolean, isNextBtn: boolean, isLoading: boolean
+  isFilter: boolean, isNextBtn: boolean, isLoading: boolean, isFirstRender: boolean
 };
 
 const initialState = {
-  data: [], filterValue: '', page: 1, isFilter: false, isNextBtn: true, isLoading: true
+  data: [], filterValue: '', page: 1, isFilter: false, 
+  isNextBtn: true, isLoading: true, isFirstRender: true
 } as IState;
 
 const costumesSlice = createSlice({
@@ -25,11 +26,8 @@ const costumesSlice = createSlice({
     },
     changeLikes(state, action: PayloadAction<{id: string, data: number}>) {
       if (state.data) {
-        // let elem = state.data.find(item => item._id === action.payload.id);
-        // elem!.likes = action.payload.data;
         state.data
           .find(item => item._id === action.payload.id)!.likes = action.payload.data;
-        // state.data = [...state.data, {...elem}];
       }
     }
   }

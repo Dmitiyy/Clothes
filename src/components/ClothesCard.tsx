@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, memo, useCallback, useEffect, useState } from "react";
+import { FC, memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
@@ -27,33 +27,26 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
   const { data } = useAppSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const [likes, setLikes] = useState<number>();
 
   const likeCostume = () => {
     if (Object.keys(data).length === 0) {navigate('/home/login')}
     else {
       likeTrigger({ costumeId: !value._id ? '' : value._id, userId: data._id! }).unwrap();
       let result: ICostume[] = [];
+      let likes: number = 0;
 
       if (data.liked?.some(item => item._id === value._id)) {
         result = data.liked!.filter(item => item._id !== value._id);
-        // setLikes(prev => prev! - 1);
-        dispatch(changeLikes({id: value._id!, data: value.likes! - 1}));
+        likes = value.likes! - 1;
       } else {
         result = [...data.liked!, {...value}];
-        // setLikes(prev => prev! + 1);
-        // dispatch(setCertainLikes({id: value._id!, data: value.likes! + 1}));
-        dispatch(changeLikes({id: value._id!, data: value.likes! + 1}));
+        likes = value.likes! + 1;
       } 
+
+      dispatch(changeLikes({id: value._id!, data: likes}));
       dispatch(setUserData({ data: {...data, liked: result } }));
     }
   }
-
-  // useEffect(() => {
-  //   if (value.likes) {
-  //     setLikes(value.likes);
-  //   }
-  // }, [value.likes]);
 
   return (
     <div className='clothes-card'>

@@ -4,7 +4,7 @@ import { AppDispatch, useAppSelector } from "../redux";
 import { launchFilter } from "../redux/costumesReducer";
 
 export const HomeFilters: FC = () => {
-  const { filterValue, isLoading } = useAppSelector(state => state.costumes);
+  const { filterValue, isLoading, isFilter } = useAppSelector(state => state.costumes);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
@@ -13,7 +13,7 @@ export const HomeFilters: FC = () => {
         dispatch(launchFilter({
           value: filterValue === '' || filterValue === 'asc' ? 'desc' : 'asc'
         }));
-      }} disabled={isLoading}>
+      }} disabled={isLoading || isFilter}>
         <svg width="17" height="11" viewBox="0 0 17 11" fill="none" 
         xmlns="http://www.w3.org/2000/svg" style={{
           transform: `rotate(${filterValue === 'desc' ? 0 : 180}deg)`
