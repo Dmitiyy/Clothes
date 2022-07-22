@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
 import { AppDispatch, useAppSelector } from "../redux";
-import { changeLikes } from "../redux/costumesReducer";
-import { useLikeCostumeMutation } from "../redux/costumesSlice";
+import { changeLikes, changeSaved } from "../redux/costumesReducer";
+import { useLikeCostumeMutation, useSaveCostumeMutation } from "../redux/costumesSlice";
 import { setUserData } from "../redux/userReducer";
 
 export interface ICostume {
@@ -19,11 +19,13 @@ export interface ICostume {
   createdAt?: Date;
   updatedAt?: Date;
   _id?: string;
+  savedTimes?: number;
 }
 
 export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value , isLike }) => {
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
   const [likeTrigger] = useLikeCostumeMutation();
+  const [saveTrigger] = useSaveCostumeMutation();
   const { data } = useAppSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -43,8 +45,27 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
         likes = value.likes! + 1;
       } 
 
-      dispatch(changeLikes({id: value._id!, data: likes}));
+      dispatch(changeLikes({ id: value._id!, data: likes }));
       dispatch(setUserData({ data: {...data, liked: result } }));
+    }
+  }
+
+  const saveCostume = () => {
+    if (Object.keys(data).length === 0) {navigate('/home/login')}
+    else {
+      saveTrigger({ costumeId: !value._id ? '' : value._id, userId: data._id! }).unwrap();
+      let result: ICostume[] = [];
+      let savedTimes: number = 0;
+
+      if (data.saved?.some(item => item._id === value._id)) {
+        result = data.saved!.filter(item => item._id !== value._id);
+      } else {
+        result = [...data.saved!, {...value}];
+        savedTimes = value.savedTimes! + 1;
+      } 
+
+      dispatch(changeSaved({ id: value._id!, data: savedTimes }));
+      dispatch(setUserData({ data: {...data, saved: result } }));
     }
   }
 
@@ -69,7 +90,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
           </div>
         </div>
         <div className='clothes-card__content-btn'>
-          <button>+</button>
+          <button onClick={saveCostume}>+</button>
         </div>
         <AnimatePresence>
           {

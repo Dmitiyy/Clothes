@@ -29,9 +29,15 @@ const costumesSlice = createSlice({
         state.data
           .find(item => item._id === action.payload.id)!.likes = action.payload.data;
       }
+    },
+    changeSaved(state, action: PayloadAction<{id: string, data: number}>) {
+      if (state.data) {
+        state.data
+          .find(item => item._id === action.payload.id)!.savedTimes = action.payload.data;
+      }
     }
   }
 });
 
-export const { setCostumesData, launchFilter, changeLikes } = costumesSlice.actions;
+export const { setCostumesData, launchFilter, changeLikes, changeSaved } = costumesSlice.actions;
 export default costumesSlice.reducer;
