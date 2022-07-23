@@ -24,20 +24,14 @@ const costumesSlice = createSlice({
       state.isNextBtn = true;
       state.filterValue = action.payload.value;
     },
-    changeLikes(state, action: PayloadAction<{id: string, data: number}>) {
+    changeCostume(state: any, action: PayloadAction<{id: string, data: number, name: string}>) {
       if (state.data) {
-        state.data
-          .find(item => item._id === action.payload.id)!.likes = action.payload.data;
-      }
-    },
-    changeSaved(state, action: PayloadAction<{id: string, data: number}>) {
-      if (state.data) {
-        state.data
-          .find(item => item._id === action.payload.id)!.savedTimes = action.payload.data;
+        const { id, name, data } = action.payload;
+        state.data.find((item: ICostume) => item._id === id)![name] = data;
       }
     }
   }
 });
 
-export const { setCostumesData, launchFilter, changeLikes, changeSaved } = costumesSlice.actions;
+export const { setCostumesData, launchFilter, changeCostume } = costumesSlice.actions;
 export default costumesSlice.reducer;

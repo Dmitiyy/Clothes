@@ -4,14 +4,10 @@ export const costumesApi = createApi({
   reducerPath: 'costumesApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }),
   endpoints: (builder) => ({
-    likeCostume: builder.mutation({
-      query(data) {
-        return {url: 'users/like', method: 'POST', body: data}
-      }
-    }),
-    saveCostume: builder.mutation({
-      query(data) {
-        return {url: 'users/save', method: 'POST', body: data}
+    costumeAction: builder.mutation({
+      query(data: {costumeId: string, userId: string, url: string}) {
+        const { costumeId, userId } = data;
+        return {url: `users/${data.url} `, method: 'POST', body: { costumeId, userId }}
       }
     }),
     fetchCostumes: builder.query({
@@ -22,6 +18,4 @@ export const costumesApi = createApi({
   })
 });
 
-export const { 
-  useLikeCostumeMutation, useFetchCostumesQuery, useSaveCostumeMutation
-} = costumesApi;
+export const { useCostumeActionMutation, useFetchCostumesQuery } = costumesApi;

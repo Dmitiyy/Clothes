@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
 import { AppDispatch, useAppSelector } from "../redux";
-import { changeLikes, changeSaved } from "../redux/costumesReducer";
-import { useLikeCostumeMutation, useSaveCostumeMutation } from "../redux/costumesSlice";
-import { setUserData } from "../redux/userReducer";
+import { changeCostume } from "../redux/costumesReducer";
+import { useCostumeActionMutation } from "../redux/costumesSlice";
+import { IUser, setUserData } from "../redux/userReducer";
 
 export interface ICostume {
   likes?: number;
@@ -24,48 +24,33 @@ export interface ICostume {
 
 export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value , isLike }) => {
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
-  const [likeTrigger] = useLikeCostumeMutation();
-  const [saveTrigger] = useSaveCostumeMutation();
+  const [costumeTrigger] = useCostumeActionMutation();
   const { data } = useAppSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const likeCostume = () => {
+  const handleProperties = (dataProperty: string, valueProperty: string, reduxUrl: string) => {
     if (Object.keys(data).length === 0) {navigate('/home/login')}
     else {
-      likeTrigger({ costumeId: !value._id ? '' : value._id, userId: data._id! }).unwrap();
+      costumeTrigger({ 
+        costumeId: !value._id ? '' : value._id, userId: data._id!, url: reduxUrl
+      }).unwrap();
       let result: ICostume[] = [];
-      let likes: number = 0;
+      let property: number = 0;
 
-      if (data.liked?.some(item => item._id === value._id)) {
-        result = data.liked!.filter(item => item._id !== value._id);
-        likes = value.likes! - 1;
+      const dataProp = data[dataProperty as keyof IUser]! as ICostume[];
+      const valueProp = value[valueProperty as keyof ICostume] as number;
+
+      if (dataProp?.some(item => item._id === value._id)) {
+        result = dataProp!.filter(item => item._id !== value._id);
+        if (reduxUrl === 'like') {property = valueProp! - 1};
       } else {
-        result = [...data.liked!, {...value}];
-        likes = value.likes! + 1;
+        result = [...dataProp!, {...value}];
+        property = valueProp! + 1;
       } 
 
-      dispatch(changeLikes({ id: value._id!, data: likes }));
-      dispatch(setUserData({ data: {...data, liked: result } }));
-    }
-  }
-
-  const saveCostume = () => {
-    if (Object.keys(data).length === 0) {navigate('/home/login')}
-    else {
-      saveTrigger({ costumeId: !value._id ? '' : value._id, userId: data._id! }).unwrap();
-      let result: ICostume[] = [];
-      let savedTimes: number = 0;
-
-      if (data.saved?.some(item => item._id === value._id)) {
-        result = data.saved!.filter(item => item._id !== value._id);
-      } else {
-        result = [...data.saved!, {...value}];
-        savedTimes = value.savedTimes! + 1;
-      } 
-
-      dispatch(changeSaved({ id: value._id!, data: savedTimes }));
-      dispatch(setUserData({ data: {...data, saved: result } }));
+      dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
+      dispatch(setUserData({ data: {...data, [dataProperty]: result } }));
     }
   }
 
@@ -76,7 +61,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
         <div className='clothes-card__content-head'>
           <div className='clothes-card__like'>
             <svg 
-              onClick={likeCostume}
+              onClick={() => {handleProperties('liked', 'likes', 'like')}}
               width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M28.1802 3.4294C26.8441 2.69333 25.3116 2.27002 23.6766 2.27002C20.792 2.27002 18.2086 3.58456 16.5028 5.64584C14.7889 3.58456 12.208 2.27002 9.31943 2.27002C7.68839 2.27002 6.15874 2.69333 4.81965 3.4294C1.9466 5.02052 0 8.07965 0 11.5953C0 12.6017 0.163778 13.567 0.460415 14.47C2.06016 21.6609 16.5028 30.73 16.5028 30.73C16.5028 30.73 30.9359 21.6611 32.5379 14.47C32.8345 13.567 33 12.6004 33 11.5953C33 8.08096 31.0534 5.02277 28.1802 3.4294Z" 
               fill={isLike ? "#DA0037" : "#fff"} />
@@ -90,7 +75,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
           </div>
         </div>
         <div className='clothes-card__content-btn'>
-          <button onClick={saveCostume}>+</button>
+          <button onClick={() => {handleProperties('saved', 'savedTimes', 'save')}}>+</button>
         </div>
         <AnimatePresence>
           {
