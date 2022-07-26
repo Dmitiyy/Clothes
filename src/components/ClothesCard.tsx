@@ -22,7 +22,8 @@ export interface ICostume {
   savedTimes?: number;
 }
 
-export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value , isLike }) => {
+export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean}> = memo(
+  ({ value , isLike, isSaved }) => {
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
   const [costumeTrigger] = useCostumeActionMutation();
   const { data } = useAppSelector(state => state.user);
@@ -35,18 +36,18 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
       costumeTrigger({ 
         costumeId: !value._id ? '' : value._id, userId: data._id!, url: reduxUrl
       }).unwrap();
-      let result: ICostume[] = [];
-      let property: number = 0;
-
       const dataProp = data[dataProperty as keyof IUser]! as ICostume[];
       const valueProp = value[valueProperty as keyof ICostume] as number;
+      
+      let result: ICostume[] = [];
+      let property: number = valueProp!;
 
       if (dataProp?.some(item => item._id === value._id)) {
         result = dataProp!.filter(item => item._id !== value._id);
-        if (reduxUrl === 'like') {property = valueProp! - 1};
+        if (reduxUrl === 'like') {property = property - 1};
       } else {
         result = [...dataProp!, {...value}];
-        property = valueProp! + 1;
+        property = property + 1;
       } 
 
       dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
@@ -75,7 +76,18 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
           </div>
         </div>
         <div className='clothes-card__content-btn'>
-          <button onClick={() => {handleProperties('saved', 'savedTimes', 'save')}}>+</button>
+          <button 
+            onClick={() => {handleProperties('saved', 'savedTimes', 'save')}}
+            className={isSaved ? 'clothes-card__btn-active' : ''}
+          >
+            {
+              isSaved ? (
+                <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.7234 0.459333C21.3574 0.0920063 20.7573 0.0920063 20.3913 0.459333L9.31098 11.537L3.60464 5.79162C3.23866 5.42295 2.6426 5.42295 2.27393 5.79162L0.274486 7.78971C-0.0914952 8.15435 -0.0914952 8.75445 0.274486 9.12178L8.63957 17.542C9.00555 17.9067 9.60161 17.9067 9.97163 17.542L23.7215 3.79083C24.0928 3.42351 24.0928 2.82206 23.7215 2.45339L21.7234 0.459333Z" fill="white"/>
+                </svg>
+              ) : '+'
+            }
+          </button>
         </div>
         <AnimatePresence>
           {
@@ -87,7 +99,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean}> = memo(({ value
                 <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3.01123 0.333313C1.7332 0.333313 0.677897 1.38634 0.677897 2.66437L0.666504 23.6666L9.99984 20.1666L19.3332 23.6666V21.9827V2.66665C19.3332 1.39141 18.2751 0.333313 16.9998 0.333313H3.01123ZM3.01123 2.66665H16.9998V20.2988L9.99984 17.6738L3.00212 20.2988L3.01123 2.66665Z" fill="#171717"/>
                 </svg>
-                <p>Saved <span>21</span> times</p>
+                <p>Saved <span>{value.savedTimes}</span> times</p>
               </motion.div>
             )
           }

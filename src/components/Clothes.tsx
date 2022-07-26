@@ -5,6 +5,7 @@ import ContentLoader from "react-content-loader";
 import { AppDispatch, useAppSelector } from "../redux";
 import { useDispatch } from "react-redux";
 import { setCostumesData } from "../redux/costumesReducer";
+import { IUser } from "../redux/userReducer";
 
 export const Clothes: FC<{
   value: ICostume[], loading: boolean, error: boolean
@@ -16,6 +17,11 @@ export const Clothes: FC<{
   useEffect(() => {
     if (!loading) {dispatch(setCostumesData({data: false, name: 'isFirstRender'}))};
   }, [loading]);
+
+  const handleActive = (property: string, item: ICostume): boolean => {
+    const dataProperty = data[property as keyof IUser] as ICostume[];
+    return dataProperty.some(elem => elem._id === item._id) ? true : false;
+  }
 
   if (error) {
     return (
@@ -48,7 +54,7 @@ export const Clothes: FC<{
         ) : 
         uniqBy(value, '_id').map((item) => (
           <ClothesCard value={item!} key={item._id} 
-          isLike={data.liked?.some(elem => elem._id === item._id) ? true : false} />
+          isLike={handleActive('liked', item)} isSaved={handleActive('saved', item)} />
         ))
       }
     </div>

@@ -60,6 +60,8 @@
           user-select: none
         svg
           cursor: pointer
+          path
+            transition: all .1s
       .clothes-card__link
         div
           cursor: pointer
@@ -89,3 +91,15 @@
         color: #000
         padding-top: 3px
         user-select: none
+        transition: all .2s
+        &:active
+          transform: scale(0.9)
+.clothes-card__btn-active
+  background: #DA0037 !important
+  box-shadow: 0px 4px 25px -3px #DA0037 !important
+  padding-top: 0px !important
+  display: flex
+  justify-content: center
+  align-items: center
+  svg
+    margin-top: 4px

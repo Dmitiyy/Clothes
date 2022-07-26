@@ -10,6 +10,7 @@ import { HomeFilters } from "../components/HomeFilters";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setCostumesData } from "../redux/costumesReducer";
 import Man from '../images/man.png';
+import { useFetchCostumesQuery } from "../redux/costumesSlice";
 
 const fetchCostumes = async (
   page: number = 1, limit: number = 6, filterValue: string = ''
@@ -24,13 +25,17 @@ const HomePage: FC = () => {
     data: clothesData, page, filterValue, isFilter, isNextBtn
   } = useAppSelector(state => state.costumes);
 
-  const { data, isError, isLoading } = useQuery<ICostume[], Error>(
-    ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
-  );
+  // const { data, isError, isLoading } = useQuery<ICostume[], Error>(
+  //   ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
+  // );
+
+  const { data, isError, isLoading } = useFetchCostumesQuery({page, limit: 6, filterValue});
   const dispatch = useDispatch<AppDispatch>();
   
   useEffect(() => {
     const controller = new AbortController();
+
+    console.log(data);
 
     if (data) {
       if (isFilter) {
