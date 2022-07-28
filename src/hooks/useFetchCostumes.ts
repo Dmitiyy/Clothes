@@ -9,12 +9,13 @@ export const useFetchCostumes = (page: number, filterValue: string) => {
  
   const fetchCostumes = async (
     page: number = 1, limit: number = 6, filterValue: string = ''
-  ): Promise<void> => {
+  ): Promise<ICostume[]> => {
     try {
       const url: string = `http://localhost:3000/costumes/all`;
       const response: AxiosResponse = await axios.get(url, {params: {page, limit, filterValue}});
       setData(response.data);
     } catch (err) {setIsError(true); setIsLoading(false)};
+    return data;
   };
 
   return { data, isError, isLoading, fetchCostumes };

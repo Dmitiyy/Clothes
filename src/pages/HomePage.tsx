@@ -10,8 +10,6 @@ import { HomeFilters } from "../components/HomeFilters";
 import { AppDispatch, useAppSelector } from "../redux";
 import { setCostumesData } from "../redux/costumesReducer";
 import Man from '../images/man.png';
-import { useFetchCostumesQuery } from "../redux/costumesSlice";
-import { useFetchCostumes } from "../hooks/useFetchCostumes";
 
 const fetchCostumes = async (
   page: number = 1, limit: number = 6, filterValue: string = ''
@@ -26,45 +24,35 @@ const HomePage: FC = () => {
     data: clothesData, page, filterValue, isFilter, isNextBtn
   } = useAppSelector(state => state.costumes);
 
-  // const { data, isError, isLoading } = useQuery<ICostume[], Error>(
-  //   ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue)
-  // );
-
-  // const { data, isError, isLoading } = useFetchCostumesQuery({page, limit: 6, filterValue});
-  const { data, isLoading, isError, fetchCostumes } = useFetchCostumes(page, filterValue);
+  const { data, isError, isLoading, isFetchedAfterMount } = useQuery<ICostume[], Error>(
+    ['costumes', [page, filterValue]], () => fetchCostumes(page, 6, filterValue), 
+    {keepPreviousData: false}
+  );
   const dispatch = useDispatch<AppDispatch>();
   
   useEffect(() => {
     const controller = new AbortController();
 
-    console.log(data);
-
-    if (data) {
+    if (data && isFetchedAfterMount) {
       if (isFilter) {
-        (async () => {
-          const data = await fetchCostumes(page, 6, filterValue);
-          dispatch(setCostumesData({data: data, name: 'data'}));
-          dispatch(setCostumesData({data: false, name: 'isFilter'}))
-        })()
+        dispatch(setCostumesData({data: data, name: 'data'}));
+        dispatch(setCostumesData({data: false, name: 'isFilter'}));
       } else {
-        (async () => {
-          const data = await fetchCostumes(page, 6, filterValue);
-          dispatch(setCostumesData({
-            data: (clothesData ? [...clothesData] : []).concat([...data]), 
-            name: 'data'
-          }));
-        })()
+        dispatch(setCostumesData({
+          data: (clothesData ? [...clothesData] : []).concat([...data]), 
+          name: 'data'
+        }));
       }
       if (data.length === 0) {dispatch(setCostumesData({data: false, name: 'isNextBtn'}))};
     }
 
     return () => controller.abort();
-  }, [data]);
+  }, [data, isFetchedAfterMount]);
 
   useEffect(() => {
     dispatch(setCostumesData({data: isLoading, name: 'isLoading'}));
   }, [isLoading]);
-  
+
   return (
     <div className="home">
       <div className="home__header">
