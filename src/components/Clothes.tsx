@@ -7,6 +7,11 @@ import { useDispatch } from "react-redux";
 import { setCostumesData } from "../redux/costumesReducer";
 import { IUser } from "../redux/userReducer";
 
+export const handleActive = (property: string, item: ICostume, user: IUser): boolean => {
+  const dataProperty = user[property as keyof IUser] as ICostume[];
+  return dataProperty.some(elem => elem._id === item._id) ? true : false;
+}
+
 export const Clothes: FC<{
   value: ICostume[], loading: boolean, error: boolean
 }> = memo(({ value, loading, error }) => {
@@ -18,10 +23,6 @@ export const Clothes: FC<{
     if (!loading) {dispatch(setCostumesData({data: false, name: 'isFirstRender'}))};
   }, [loading]);
 
-  const handleActive = (property: string, item: ICostume): boolean => {
-    const dataProperty = data[property as keyof IUser] as ICostume[];
-    return dataProperty.some(elem => elem._id === item._id) ? true : false;
-  }
 
   if (error) {
     return (
@@ -53,8 +54,11 @@ export const Clothes: FC<{
           })
         ) : 
         uniqBy(value, '_id').map((item) => (
-          <ClothesCard value={item!} key={item._id} 
-          isLike={handleActive('liked', item)} isSaved={handleActive('saved', item)} />
+          <ClothesCard 
+            value={item!} key={item._id} 
+            isLike={handleActive('liked', item, data)} 
+            isSaved={handleActive('saved', item, data)} 
+          />
         ))
       }
     </div>

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, memo, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
@@ -27,17 +27,20 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
   const [costumeTrigger] = useCostumeActionMutation();
   const { data } = useAppSelector(state => state.user);
+  const { data: costumesData } = useAppSelector(state => state.costumes);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleProperties = (dataProperty: string, valueProperty: string, reduxUrl: string) => {
+  const handleProperties = (
+    dataProperty: string, valueProperty: 'likes' | 'savedTimes', reduxUrl: string
+  ) => {
     if (Object.keys(data).length === 0) {navigate('/home/login')}
     else {
       costumeTrigger({ 
         costumeId: !value._id ? '' : value._id, userId: data._id!, url: reduxUrl
       }).unwrap();
       const dataProp = data[dataProperty as keyof IUser]! as ICostume[];
-      const valueProp = value[valueProperty as keyof ICostume] as number;
+      const valueProp = costumesData.find(item => item._id === value._id)![valueProperty as keyof ICostume] as number;
       
       let result: ICostume[] = [];
       let property: number = valueProp!;
@@ -46,12 +49,24 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
         result = dataProp!.filter(item => item._id !== value._id);
         if (reduxUrl === 'like') {property = property - 1};
       } else {
-        result = [...dataProp!, {...value}];
         property = property + 1;
+        result = [...dataProp!, {...value, [valueProperty]: property}];
       } 
 
+      console.log(result, valueProperty);
+      
       dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
       dispatch(setUserData({ data: {...data, [dataProperty]: result } }));
+    }
+  }
+
+  const getCostume = (): number => {
+    const suit = costumesData.find(item => item._id === value._id);
+
+    if (suit) {
+      return suit.savedTimes!;
+    } else {
+      return 0;
     }
   }
 
@@ -99,7 +114,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
                 <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3.01123 0.333313C1.7332 0.333313 0.677897 1.38634 0.677897 2.66437L0.666504 23.6666L9.99984 20.1666L19.3332 23.6666V21.9827V2.66665C19.3332 1.39141 18.2751 0.333313 16.9998 0.333313H3.01123ZM3.01123 2.66665H16.9998V20.2988L9.99984 17.6738L3.00212 20.2988L3.01123 2.66665Z" fill="#171717"/>
                 </svg>
-                <p>Saved <span>{value.savedTimes}</span> times</p>
+                <p>Saved <span>{getCostume()}</span> times</p>
               </motion.div>
             )
           }
