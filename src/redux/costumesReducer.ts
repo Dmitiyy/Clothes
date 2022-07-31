@@ -27,7 +27,8 @@ const costumesSlice = createSlice({
     changeCostume(state: any, action: PayloadAction<{id: string, data: number, name: string}>) {
       if (state.data) {
         const { id, name, data } = action.payload;
-        state.data.find((item: ICostume) => item._id === id)![name] = data;
+        const costume = state.data.find((item: ICostume) => item._id === id);
+        if (costume) {costume[name] = data};
       }
     }
   }

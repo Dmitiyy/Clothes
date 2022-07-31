@@ -20,9 +20,21 @@ const userSlice = createSlice({
   reducers: {
     setUserData(state, action: PayloadAction<{data: any}>) {
       state.data = action.payload.data;
+    },
+    changeUserCostume(state: any, action: PayloadAction<{
+      id: string, data: number, name: string, dataProperty: string
+    }>) {
+      if (state.data) {
+        const { id, name, data, dataProperty } = action.payload;
+        const suit = state.data[dataProperty].find((item: ICostume) => item._id === id);
+       
+        if (suit) {
+          suit[name] = data;
+        }
+      }
     }
   }
 });
 
-export const { setUserData } = userSlice.actions;
+export const { setUserData, changeUserCostume } = userSlice.actions;
 export default userSlice.reducer;
