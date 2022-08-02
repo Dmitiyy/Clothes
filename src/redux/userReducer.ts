@@ -22,15 +22,18 @@ const userSlice = createSlice({
       state.data = action.payload.data;
     },
     changeUserCostume(state: any, action: PayloadAction<{
-      id: string, data: number, name: string, dataProperty: string
+      id: string, data: number, name: string, dataProperty: boolean
     }>) {
       if (state.data) {
-        const { id, name, data, dataProperty } = action.payload;
-        const suit = state.data[dataProperty].find((item: ICostume) => item._id === id);
-       
-        if (suit) {
-          suit[name] = data;
-        }
+        const { id, name, data } = action.payload;
+
+        const findCostume = (arr: Array<ICostume>) => arr.find((item: ICostume) => item._id === id);
+
+        const liked: any = findCostume(state.data.liked);
+        const saved: any = findCostume(state.data.saved);
+    
+        if (liked) {liked[name] = data};
+        if (saved) {saved[name] = data};
       }
     }
   }

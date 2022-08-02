@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, memo, useCallback, useEffect, useState } from "react";
+import { FC, memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
@@ -27,12 +27,8 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
   const [isQuantityOpen, setIsQuantityOpen] = useState<boolean>(false);
   const [costumeTrigger] = useCostumeActionMutation();
   const { data } = useAppSelector(state => state.user);
-  const { data: costumesData } = useAppSelector(state => state.costumes);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const suit = data.liked!.find(item => item._id === value._id);
-
-  const [suit, setSuit] = useState(value);
 
   const handleProperties = (
     dataProperty: string, valueProperty: 'likes' | 'savedTimes', reduxUrl: string
@@ -55,12 +51,18 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
       } else {
         property = property + 1;
         result = [...dataProp!, {...value, [valueProperty]: property}];
-      } 
+      };
+
+      console.log(result);
+      
 
       dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
       dispatch(setUserData({ data: {...data, [dataProperty]: result } }));
-      dispatch(changeUserCostume({ 
-        id: value._id!, data: property, name: valueProperty, dataProperty 
+      dispatch(changeUserCostume({
+        id: value._id!, 
+        data: property, 
+        name: valueProperty, 
+        dataProperty: dataProperty === 'liked' ? true : false
       }));
     }
   }
