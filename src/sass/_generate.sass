@@ -1,3 +1,43 @@
+@mixin generate-btn($width)
+  width: $width
+  height: 55px
+  background: #DA0037
+  box-shadow: 0px 4px 25px -3px #DA0037
+  border-radius: 14px
+  border: none
+  cursor: pointer
+  display: flex
+  justify-content: center
+  align-items: center
+  color: #fff
+  font-size: 18px
+  font-weight: bold
+  font-family: 'Poppins', sans-serif
+  transition: all .3s
+  &:disabled
+    opacity: 0.5
+    cursor: default
+    &:active
+      box-shadow: 0px 4px 25px -3px #DA0037 !important
+    &:hover
+      box-shadow: 0px 4px 25px -3px #DA0037
+      background: #DA0037
+      svg
+        path
+          fill: #fff
+  &:active
+    box-shadow: none !important
+  svg
+    width: 24px
+    path
+      transition: all .3s
+  &:hover
+    box-shadow: 0px 4px 25px -3px #ffffff
+    background: #fff
+    svg
+      path
+        fill: #171717
+
 .generate
   width: 100%
   color: #fff
@@ -44,45 +84,12 @@
   &-prev
     transform: scaleX(-1)
     margin-right: 20px
-  &-next, &-prev
-    width: 55px
-    height: 55px
-    background: #DA0037
-    box-shadow: 0px 4px 25px -3px #DA0037
-    border-radius: 14px
-    border: none
-    cursor: pointer
-    display: flex
-    justify-content: center
-    align-items: center
-    color: #fff
-    font-size: 18px
-    font-weight: bold
-    font-family: 'Poppins', sans-serif
-    transition: all .3s
-    &:disabled
-      opacity: 0.5
-      cursor: default
-      &:active
-        box-shadow: 0px 4px 25px -3px #DA0037 !important
-      &:hover
-        box-shadow: 0px 4px 25px -3px #DA0037
-        background: #DA0037
-        svg
-          path
-            fill: #fff
-    &:active
-      box-shadow: none !important
-    svg
-      width: 24px
-      path
-        transition: all .3s
+  &-response
+    @include generate-btn(155px)
     &:hover
-      box-shadow: 0px 4px 25px -3px #ffffff
-      background: #fff
-      svg
-        path
-          fill: #171717
+      color: #171717
+  &-next, &-prev
+    @include generate-btn(55px)
     &__wrap
       display: flex
       justify-content: flex-end

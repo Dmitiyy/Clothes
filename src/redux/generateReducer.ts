@@ -22,9 +22,11 @@ interface IStep {
   step: number;
 }
 
+export type TGenerateParams = {sex: string, color: string, mood: string, event: string};
+
 interface IState {
   data: {sex: IStep, color: IStep, mood: IStep, event: IStep};
-  params: {sex: string, color: string, mood: string, event: string};
+  params: TGenerateParams,
   status: string; //* error, loading, success
 };
 

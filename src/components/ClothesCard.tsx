@@ -53,9 +53,6 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
         result = [...dataProp!, {...value, [valueProperty]: property}];
       };
 
-      console.log(result);
-      
-
       dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
       dispatch(setUserData({ data: {...data, [dataProperty]: result } }));
       dispatch(changeUserCostume({
