@@ -1,33 +1,34 @@
 import { FC, useEffect, useState } from "react";
-import { useAppSelector } from "../redux";
 import { useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import ContentLoader from "react-content-loader";
-
-import { GenerateButton } from "../components/GenerateButton";
-import { AppDispatch } from "../redux";
-import { fetchGenerateStep, setDataDefault, TGenerateParams } from "../redux/generateReducer";
 import { useMutation } from "react-query";
 import axios from "axios";
+
+import { GenerateButton } from "../components/GenerateButton";
+import { useAppSelector } from "../redux";
+import { AppDispatch } from "../redux";
+import { fetchGenerateStep, setDataDefault, TGenerateParams } from "../redux/generateReducer";
+import { ICostume } from "../components/ClothesCard";
+import { Clothes } from "../components/Clothes";
 
 const GeneratePage: FC = () => {
   const [stepNum, setStepNum] = useState<number>(1);
   const { data, params, status } = useAppSelector(state => state.generate);
   const dispatch = useDispatch<AppDispatch>();
+  const [generatedSuits, setGeneratedSuits] = useState<ICostume[]>([]);
 
   const getCostumes = useMutation(
     (data: TGenerateParams) => {
       return axios.get('http://localhost:3000/costumes/generate', {params: {...data}});
     },
-    {
-      onSuccess(data) {
-        console.log(data);
-      }
-    }
+    { onSuccess({ data }) {setGeneratedSuits([...data])} }
   )
 
   const findStepData = Object.entries(data).find((item) => item[1].step === stepNum)!;
   const findParamName = Object.entries(params).find(item => item[0] === findStepData[0])!;
+
+  const sendParams = () => {getCostumes.mutate(params)};
 
   useEffect(() => {
     console.log(params);
@@ -89,7 +90,10 @@ const GeneratePage: FC = () => {
             </button>
             {
               stepNum === 4 ? (
-                <button className="generate-response">
+                <button 
+                  className="generate-response" onClick={sendParams} 
+                  disabled={getCostumes.isError || getCostumes.isLoading}
+                >
                   Generate
                 </button>
               ) : (
@@ -102,6 +106,11 @@ const GeneratePage: FC = () => {
             }
           </motion.div>
         ) : null 
+      }
+      {
+        generatedSuits?.length !== 0 && (
+          <Clothes value={generatedSuits} loading={getCostumes.isLoading} error={getCostumes.isError} /> 
+        )
       }
     </div>
   )
