@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { ICostume } from '../components/ClothesCard';
 
 export const fetchGenerateStep = createAsyncThunk(
   'generate/fetchStep', 
@@ -11,11 +12,7 @@ export const fetchGenerateStep = createAsyncThunk(
   }
 ); 
 
-interface IDefaultPayload {
-  data: any;
-  ini: string;
-}
-
+interface IDefaultPayload { data: any; ini: string; suit?: boolean, id?: string; name?: string };
 interface IStep {
   description: string;
   options?: string[];
@@ -28,6 +25,7 @@ interface IState {
   data: {sex: IStep, color: IStep, mood: IStep, event: IStep};
   params: TGenerateParams,
   status: string; //* error, loading, success
+  suitsData: ICostume[]
 };
 
 const initialState = {
@@ -39,6 +37,7 @@ const initialState = {
   },
   params: {sex: '', color: '', mood: '', event: ''},
   status: '',
+  suitsData: []
 } as IState;
 
 const generateSlice = createSlice({
@@ -46,7 +45,13 @@ const generateSlice = createSlice({
   initialState,
   reducers: {
     setDataDefault(state: any, action: PayloadAction<IDefaultPayload>) {
-      state[action.payload.ini] = action.payload.data;
+      const { ini, data, suit, id, name } = action.payload;
+      if (suit) {
+        const costume = state.suitsData.find((item: ICostume) => item._id === id);
+        if (costume) {costume[name!] = data};
+      } else {
+        state[ini] = data;
+      }
     }
   },
   extraReducers(builder) {

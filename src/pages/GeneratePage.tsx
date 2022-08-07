@@ -14,25 +14,20 @@ import { Clothes } from "../components/Clothes";
 
 const GeneratePage: FC = () => {
   const [stepNum, setStepNum] = useState<number>(1);
-  const { data, params, status } = useAppSelector(state => state.generate);
+  const { data, params, status, suitsData } = useAppSelector(state => state.generate);
   const dispatch = useDispatch<AppDispatch>();
-  const [generatedSuits, setGeneratedSuits] = useState<ICostume[]>([]);
 
   const getCostumes = useMutation(
     (data: TGenerateParams) => {
       return axios.get('http://localhost:3000/costumes/generate', {params: {...data}});
     },
-    { onSuccess({ data }) {setGeneratedSuits([...data])} }
+    { onSuccess({ data }) {dispatch(setDataDefault({ini: 'suitsData', data: [...data]}))} }
   )
 
   const findStepData = Object.entries(data).find((item) => item[1].step === stepNum)!;
   const findParamName = Object.entries(params).find(item => item[0] === findStepData[0])!;
 
   const sendParams = () => {getCostumes.mutate(params)};
-
-  useEffect(() => {
-    console.log(params);
-  }, [params]);
 
   const manageStep = async (plus: boolean) => {
     if (!plus) {
@@ -108,8 +103,8 @@ const GeneratePage: FC = () => {
         ) : null 
       }
       {
-        generatedSuits?.length !== 0 && (
-          <Clothes value={generatedSuits} loading={getCostumes.isLoading} error={getCostumes.isError} /> 
+        suitsData?.length !== 0 && (
+          <Clothes value={suitsData} loading={getCostumes.isLoading} error={getCostumes.isError} /> 
         )
       }
     </div>

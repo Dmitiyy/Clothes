@@ -26,7 +26,6 @@ const userSlice = createSlice({
     }>) {
       if (state.data) {
         const { id, name, data } = action.payload;
-
         const findCostume = (arr: Array<ICostume>) => arr.find((item: ICostume) => item._id === id);
 
         const liked: any = findCostume(state.data.liked);

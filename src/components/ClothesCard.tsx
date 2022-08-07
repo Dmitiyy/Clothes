@@ -6,6 +6,7 @@ import MockClothes from '../images/costume.png';
 import { AppDispatch, useAppSelector } from "../redux";
 import { changeCostume } from "../redux/costumesReducer";
 import { useCostumeActionMutation } from "../redux/costumesSlice";
+import { setDataDefault } from "../redux/generateReducer";
 import { changeUserCostume, IUser, setUserData } from "../redux/userReducer";
 
 export interface ICostume {
@@ -55,6 +56,10 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
 
       dispatch(changeCostume({ id: value._id!, data: property, name: valueProperty }));
       dispatch(setUserData({ data: {...data, [dataProperty]: result } }));
+      dispatch(setDataDefault({ 
+        ini: 'suitsData', data: property, name: valueProperty, suit: true, id: value._id!
+      }));
+
       dispatch(changeUserCostume({
         id: value._id!, 
         data: property, 
