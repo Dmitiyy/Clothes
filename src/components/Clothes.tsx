@@ -8,8 +8,8 @@ import { setCostumesData } from "../redux/costumesReducer";
 import { IUser } from "../redux/userReducer";
 
 export const handleActive = (property: string, item: ICostume, user: IUser): boolean => {
-  const dataProperty = user[property as keyof IUser] as ICostume[];
-  return dataProperty.some(elem => elem._id === item._id) ? true : false;
+  const dataProperty = user && user[property as keyof IUser] as ICostume[];
+  return user && dataProperty.some(elem => elem._id === item._id) ? true : false;
 }
 
 export const Clothes: FC<{

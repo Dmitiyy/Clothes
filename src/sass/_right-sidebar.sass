@@ -3,6 +3,31 @@
   height: 300px
   position: sticky
   top: 48px
+  &__content
+    position: relative
+  &__logout
+    width: 140px
+    height: 46px
+    background: #fff
+    border-radius: 12px
+    display: flex
+    justify-content: center
+    align-items: center
+    position: absolute
+    top: 50px
+    right: 0px
+    svg
+      width: 21px
+      path
+        stroke: #171717
+        stroke-width: 1px !important
+    p
+      margin-left: 10px
+      font-size: 16px
+      color: #171717
+      span
+        font-weight: bold
+        cursor: pointer
   a
     text-decoration: none !important
     font-weight: 400
@@ -12,11 +37,14 @@
     width: 100%
     display: flex
     justify-content: flex-end
+    position: relative
     h3
       font-weight: 400
       color: #fff
       margin-top: 5px
       margin-right: 15px
+    svg
+      cursor: pointer
   h2
     font-weight: 600
     color: #fff

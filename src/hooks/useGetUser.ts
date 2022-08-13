@@ -20,12 +20,12 @@ const useGetUser = (): IValue => {
     if (data?.user) {
       setUser(data?.user);
       setLogin(false);
-      dispatch(setUserData({data: data?.user}));
+      dispatch(setUserData({data: {...data?.user}}));
     };
     if (isError) {dispatch(setUserData({data: null}))};
   }
 
-  useEffect(() => {fetchUser()}, [isError, isLoading]);
+  useEffect(() => {fetchUser()}, [isError, isLoading, data]);
   return { user, loading: isLoading, login };
 } 
 

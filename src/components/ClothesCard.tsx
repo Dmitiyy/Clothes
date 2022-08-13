@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, memo, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MockClothes from '../images/costume.png';
@@ -34,7 +34,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
   const handleProperties = (
     dataProperty: string, valueProperty: 'likes' | 'savedTimes', reduxUrl: string
   ) => {
-    if (Object.keys(data).length === 0) {navigate('/home/login')}
+    if (!data || Object.keys(data).length === 0) {navigate('/home/login')}
     else {
       costumeTrigger({ 
         costumeId: !value._id ? '' : value._id, userId: data._id!, url: reduxUrl
@@ -71,7 +71,7 @@ export const ClothesCard: FC<{value: ICostume, isLike: boolean, isSaved: boolean
 
   return (
     <div className='clothes-card'>
-      <img src={MockClothes} alt="clothes" />
+      <img src={value.image} alt="clothes" className="clothes-card__image" />
       <div className='clothes-card__content'>
         <div className='clothes-card__content-head'>
           <div className='clothes-card__like'>

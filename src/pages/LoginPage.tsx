@@ -36,7 +36,7 @@ const LoginPage: FC = () => {
           setCookie(
             'clothesToken', JSON.stringify(data.token), {maxAge: (60 * 60 * 24) * 30}
           );
-          dispatch(setUserData({...data.user}));
+          dispatch(setUserData({data: {...data.user[0]}}));
           navigate('/home');
           break;
         case 'failure':

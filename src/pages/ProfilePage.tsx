@@ -23,7 +23,17 @@ const ProfilePage: FC = () => {
       </div>
       <div className="profile__liked">
         <h2>Saved</h2>
-        <Clothes value={data.saved!} loading={!data.saved} error={!data} />
+        {
+          data.saved && data.saved!.length !== 0 ? (
+            <Clothes value={data.saved!} loading={!data.saved} error={!data} />
+          ) : (
+            <div className="message">
+              <p>You don't have any saved suit</p>
+              <p>Please like a suit</p>
+              <span>😟</span>
+            </div>
+          )
+        }
       </div>
     </div>
   )
