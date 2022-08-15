@@ -1,26 +1,28 @@
 import { FC, Fragment, useState, useCallback, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from "swiper";
 import { motion, AnimatePresence } from "framer-motion";
+import { uniqBy } from "lodash";
+import { useCookies } from "react-cookie";
 
 import useGetUser from "../hooks/useGetUser";
 import { ClothesCard } from "./ClothesCard";
 import { Swiper as SwiperCore } from "swiper/types";
-import { AppDispatch, useAppSelector } from "../redux";
-import 'swiper/css';
+import { useAppSelector } from "../redux";
 import { handleActive } from "./Clothes";
-import { uniqBy } from "lodash";
-import { useDispatch } from "react-redux";
+import 'swiper/css';
 
 export const RightSidebar: FC = () => {
   const { user, login, loading } = useGetUser();
   const [slider, setSlider] = useState<SwiperCore>();
   const { data: userData } = useAppSelector(state => state.user);
   const isUserExist = user && userData && Object.entries(userData).length !== 0;
-  const dispatch = useDispatch<AppDispatch>();
+
+  const [,, removeCookie] = useCookies(['clothesToken']);
   const [isMessage, setIsMessage] = useState<boolean>(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleRightClick = useCallback(() => {
     if (!slider) return;
@@ -37,7 +39,7 @@ export const RightSidebar: FC = () => {
     <div className='right-sidebar'>
       <div className='right-sidebar__title'>
         {
-          login || loading ? (
+          login || loading || !isUserExist ? (
             <Link to='home/login'>Log in</Link>
           ) : (
             <Fragment>
@@ -65,7 +67,7 @@ export const RightSidebar: FC = () => {
                           <path d="M 85 90 H 5 c -2.761 0 -5 -2.238 -5 -5 V 5 c 0 -2.761 2.239 -5 5 -5 h 80 c 2.762 0 5 2.239 5 5 v 14.395 c 0 2.761 -2.238 5 -5 5 s -5 -2.239 -5 -5 V 10 H 10 v 70 h 70 v -9.395 c 0 -2.762 2.238 -5 5 -5 s 5 2.238 5 5 V 85 C 90 87.762 87.762 90 85 90 z" transform=" matrix(1 0 0 1 0 0) " strokeLinecap="round" />
                         </g>
                       </svg>
-                      <p><span>Log out</span></p>
+                      <p onClick={() => {removeCookie('clothesToken'); navigate('/home')}}><span>Log out</span></p>
                     </motion.div>
                   )
                 }
