@@ -14,7 +14,7 @@ import Man from '../images/man.png';
 const fetchCostumes = async (
   page: number = 1, limit: number = 6, filterValue: string = ''
 ): Promise<ICostume[]> => {
-  const url: string = `http://localhost:3000/costumes/all`;
+  const url: string = `https://clothes-black.vercel.app/costumes/all`;
   const response: AxiosResponse = await axios.get(url, {params: {page, limit, filterValue}});
   return response.data;
 };
