@@ -5,7 +5,7 @@ import { ICostume } from '../components/ClothesCard';
 export const fetchGenerateStep = createAsyncThunk(
   'generate/fetchStep', 
   async ({sex, color, mood}: {sex?: string, color?: string, mood?: string}) => {
-    const response = await axios.get('http://localhost:3000/costumes/step', {
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND}/costumes/step`, {
       params: {sex, color, mood}
     });
     return response.data;

@@ -3,7 +3,7 @@ import { IUser } from './userReducer';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.REACT_APP_BACKEND}/` }),
   endpoints: (builder) => ({
     createUser: builder.mutation({
       query(data) {

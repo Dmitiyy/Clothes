@@ -19,7 +19,7 @@ const GeneratePage: FC = () => {
 
   const getCostumes = useMutation(
     (data: TGenerateParams) => {
-      return axios.get('http://localhost:3000/costumes/generate', {params: {...data}});
+      return axios.get(`${process.env.REACT_APP_BACKEND}/costumes/generate`, {params: {...data}});
     },
     { onSuccess({ data }) {dispatch(setDataDefault({ini: 'suitsData', data: [...data]}))} }
   )
@@ -37,6 +37,11 @@ const GeneratePage: FC = () => {
     await dispatch(fetchGenerateStep({...params})).unwrap();
   }
 
+  useEffect(() => {
+    console.log(status);
+    
+  }, [status])
+
   return (
     <div className="generate">
       <h2>Generate clothes</h2>
@@ -52,8 +57,8 @@ const GeneratePage: FC = () => {
                 width={365}
                 height={50}
                 viewBox="0 0 365 50"
-                backgroundColor="#171717"
-                foregroundColor="#444"
+                backgroundColor="#444"
+                foregroundColor="#313131"
                 key={item}
               >
                 <rect x="0" y="0" rx="10" ry="10" width="365" height="50" />

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const costumesApi = createApi({
   reducerPath: 'costumesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.REACT_APP_BACKEND}/` }),
   endpoints: (builder) => ({
     costumeAction: builder.mutation({
       query(data: {costumeId: string, userId: string, url: string}) {

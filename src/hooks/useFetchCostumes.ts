@@ -11,7 +11,7 @@ export const useFetchCostumes = (page: number, filterValue: string) => {
     page: number = 1, limit: number = 6, filterValue: string = ''
   ): Promise<ICostume[]> => {
     try {
-      const url: string = `http://localhost:3000/costumes/all`;
+      const url: string = `${process.env.REACT_APP_BACKEND}/all`;
       const response: AxiosResponse = await axios.get(url, {params: {page, limit, filterValue}});
       setData(response.data);
     } catch (err) {setIsError(true); setIsLoading(false)};
