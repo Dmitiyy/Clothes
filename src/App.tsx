@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { LeftSidebar } from './components/LeftSidebar';
 import { RightSidebar } from './components/RightSidebar';
 
@@ -11,9 +11,9 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 
 const App = () => {
   return (
-    <div className='container'>
+    <div className="container">
       <LeftSidebar />
-      <div className='content'>
+      <div className="content">
         <Suspense>
           <Routes>
             <Route path="/home" element={<HomePage />} />
@@ -28,6 +28,6 @@ const App = () => {
       <RightSidebar />
     </div>
   );
-}
+};
 
 export default App;

@@ -111,3 +111,13 @@
   color: #fff
   p
     font-size: 18px
+
+@media (max-width: 900px)
+  .home
+    &__header
+      padding: 40px
+      justify-content: center
+      img
+        display: none
+    &__cards-wrap
+      grid-template-columns: repeat(2, 1fr)

@@ -81,3 +81,42 @@
   .swiper
     width: 223px !important
     margin-left: 0 !important
+
+.right-sidebar__mobile
+  display: none
+
+@media (max-width: 1310px)
+  .right-sidebar
+    width: auto
+    height: 100%
+    top: 20px
+  .right-sidebar__desktop
+    display: none
+  .right-sidebar__mobile
+    display: block
+  .right-sidebar__burger
+    box-shadow: 0px 4px 25px -3px rgb(0 0 0 / 65%)
+    width: 55px
+    height: 55px
+    background: #444
+    border-radius: 100px
+    cursor: pointer
+    display: flex
+    flex-direction: column
+    justify-content: space-evenly
+    align-items: center
+    padding: 10px
+    span
+      display: inline-block
+      width: 70%
+      height: 4px
+      background: #fff
+      border-radius: 100px
+
+@media (max-width: 1310px)
+  .right-sidebar
+    width: auto
+    position: fixed
+    height: 100%
+    top: 20px
+    right: 20px

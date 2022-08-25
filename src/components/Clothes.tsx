@@ -9,12 +9,17 @@ import { IUser } from "../redux/userReducer";
 
 export const handleActive = (property: string, item: ICostume, user: IUser): boolean => {
   const dataProperty = user && user[property as keyof IUser] as ICostume[];
-  return user && dataProperty.some(elem => elem._id === item._id) ? true : false;
+
+  if (dataProperty) {
+    return dataProperty.some(elem => elem._id === item._id) ? true : false;
+  } else {
+    return false;
+  }
 }
 
 export const Clothes: FC<{
   value: ICostume[], loading: boolean, error: boolean
-}> = memo(({ value, loading, error }) => {
+}> = ({ value, loading, error }) => {
   const { data } = useAppSelector(state => state.user);
   const { isFirstRender } = useAppSelector(state => state.costumes);
   const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +27,6 @@ export const Clothes: FC<{
   useEffect(() => {
     if (!loading) {dispatch(setCostumesData({data: false, name: 'isFirstRender'}))};
   }, [loading]);
-
 
   if (error) {
     return (
@@ -63,4 +67,4 @@ export const Clothes: FC<{
       }
     </div>
   )
-});
+};

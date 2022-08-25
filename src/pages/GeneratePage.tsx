@@ -37,11 +37,6 @@ const GeneratePage: FC = () => {
     await dispatch(fetchGenerateStep({...params})).unwrap();
   }
 
-  useEffect(() => {
-    console.log(status);
-    
-  }, [status])
-
   return (
     <div className="generate">
       <h2>Generate clothes</h2>
