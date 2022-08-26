@@ -22,3 +22,24 @@
     span
       margin-top: 10px
       font-size: 40px
+
+@media (max-width: 900px)
+  .profile
+    &__border-cards
+      flex-direction: column
+      .border-card
+        width: 100%
+      .border-card + .border-card
+        margin-top: 30px
+
+@media (max-width: 370px)
+  .profile
+    &__border-cards
+      flex-direction: column
+      .border-card
+        width: 100%
+        &__wrap
+          font-size: 16px
+          padding-right: 20px
+      .border-card + .border-card
+        margin-top: 30px
