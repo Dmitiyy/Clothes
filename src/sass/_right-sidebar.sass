@@ -84,32 +84,66 @@
 
 .right-sidebar__mobile
   display: none
+  &-close
+    font-weight: bold
+    font-size: 20px
+    user-select: none
+    cursor: pointer
+    display: inline-block
+    width: 50px
+    height: 50px
+    background: #171717
+    display: flex
+    justify-content: center
+    border-radius: 100px
+    align-items: center
+  &-nav
+    display: flex
+    width: 263px
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 20px
+    a
+      color: inherit
+      font-size: inherit
+      font-family: 'Poppins', sans-serif
+      text-decoration: none
+    p
+      cursor: pointer
   &-wrap
-    width: 75%
+    width: 263px
     background: #171717
     padding: 20px
     border-radius: 24px
     display: flex
     justify-content: center
     align-items: center
+
+    h3
+      margin-right: 10px
     .right-sidebar__left
       display: none
     .right-sidebar__saved
       width: 223px
   &-content
-    width: 350px
-    height: 100vh
+    min-height: 100vh
     position: fixed
-    // display: none
     top: 0
-    right: 0
+    right: -100%
     background: #444
     box-shadow: 0px 4px 25px 0px rgb(0 0 0 / 100%)
+    padding: 20px
+    color: #fff
+    font-size: 18px
+    transition: all .3s
     .swiper
       width: 223px !important
       margin-left: 0 !important
     .right-sidebar__wrap-mobile
       width: 223px
+
+.right-sidebar__mobile-active
+  right: 0 !important
 
 @media (max-width: 1310px)
   .right-sidebar
@@ -153,3 +187,10 @@
     height: auto
     top: 20px
     right: 20px
+
+@media (max-width: 350px)
+  .right-sidebar__mobile-content
+    width: 100%
+    display: flex
+    align-items: center
+    flex-direction: column

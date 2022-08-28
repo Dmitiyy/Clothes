@@ -3,16 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCookies } from "react-cookie";
 import { Portal } from 'react-portal';
+import { NavLink } from "react-router-dom";
+import { clsx } from 'clsx';
 
 import useGetUser from "../hooks/useGetUser";
-import { useAppSelector } from "../redux";
+import { AppDispatch, useAppSelector } from "../redux";
 import { RightSlider } from "./RightSlider";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userReducer";
 import 'swiper/css';
 
 export const RightSidebar: FC = () => {
   const { user, login, loading } = useGetUser();
   const { data: userData } = useAppSelector(state => state.user);
   const isUserExist = user && userData && Object.entries(userData).length !== 0;
+  const dispatch = useDispatch<AppDispatch>();
+  const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
 
   const [,, removeCookie] = useCookies(['clothesToken']);
   const [isMessage, setIsMessage] = useState<boolean>(false);
@@ -78,32 +84,48 @@ export const RightSidebar: FC = () => {
           />
         </div>
         <div className="right-sidebar__mobile">
-          <div className="right-sidebar__burger">
+          <div className="right-sidebar__burger" onClick={() => {setIsMobileOpen(true)}}>
             {Array(3).fill(1).map((_, index) => (<span key={index} />))}
           </div>
           <Portal>
-            <div className="right-sidebar__mobile-content">
-              {
-                login || loading || !isUserExist ? (
-                  <Link to='home/login'>Log in</Link>
-                ) : (
-                  <Fragment>
-                    <h3>{user.name}</h3>
-                    <p onClick={() => {removeCookie('clothesToken'); navigate('/home')}}>
+            <div className={
+              clsx("right-sidebar__mobile-content", isMobileOpen && "right-sidebar__mobile-active")
+            }>
+              <div className="right-sidebar__mobile-nav">
+                {
+                  login || loading || !isUserExist ? (
+                    <Link to='home/login'>Log in</Link> 
+                  ) : (
+                    <p onClick={() => {
+                      removeCookie('clothesToken'); 
+                      navigate('/home');
+                      dispatch(setUserData({data: {}}));
+                    }}>
                       <span>Log out</span>
                     </p>
-                    <div className="right-sidebar__mobile-wrap">
-                      <RightSlider
-                        isMessage={isMessage}
-                        loading={loading}
-                        isUserExist={isUserExist}
-                        userData={userData}
-                        user={user}
-                      />
-                    </div>
-                  </Fragment>
-                )
-              }
+                  )
+                }
+                <span 
+                  className="right-sidebar__mobile-close" onClick={() => {setIsMobileOpen(false)}} 
+                >&#x2715;</span>
+              </div>
+              <div className="right-sidebar__mobile-nav">
+                <NavLink to='home'>Home</NavLink>
+                {
+                  login || loading || !isUserExist ? (<Link to='home/login'>Profile</Link>) 
+                  : (<NavLink to='profile'>Profile</NavLink>)
+                }
+                <NavLink to='info'>Info</NavLink>
+              </div>
+              <div className="right-sidebar__mobile-wrap">
+                <RightSlider
+                  isMessage={isMessage}
+                  loading={loading}
+                  isUserExist={isUserExist}
+                  userData={userData}
+                  user={user}
+                />
+              </div>
             </div>
           </Portal>
         </div>

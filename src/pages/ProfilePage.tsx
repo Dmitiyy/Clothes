@@ -12,7 +12,7 @@ const ProfilePage: FC = () => {
   const returnField = (field: string) => !data ? 'Loading...' : field;
   
   useEffect(() => {
-    if (isNull(data)) {navigate('/home/login')}
+    if (isNull(data) || Object.keys(data).length === 0) {navigate('/home/login')};
   }, [data]);
 
   return (
